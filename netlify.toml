@@ -3,7 +3,7 @@
   # This will be run the site build
   command = "npm run build"
   # This is the directory is publishing to netlify's CDN
-  publish = "build"
+  publish = "built-lambda"
 
 [dev]
   # Local dev command. A.k.a npm start
