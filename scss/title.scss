@@ -1,0 +1,84 @@
+.title {
+  color: inherit;
+  display: block;
+  font-family: $font-family;
+  font-size: inherit;
+  font-weight: $font-weight-bold;
+  line-height: 1.2em;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: inherit;
+}
+
+// Behavior
+
+.title--center {
+  text-align: center;
+}
+
+.title--left {
+  text-align: left;
+}
+
+.title--right {
+  text-align: right;
+}
+
+// Sizes
+
+.title--nano {
+  font-size: rem(16);
+}
+
+.title--micro {
+  font-size: rem(16);
+
+  @media (min-width: $screen-desktop) {
+    font-size: rem(19);
+  }
+}
+
+.title--small {
+  font-size: rem(19);
+
+  @media (min-width: $screen-desktop) {
+    font-size: rem(23);
+  }
+}
+
+.title--medium {
+  font-size: rem(23);
+
+  @media (min-width: $screen-desktop) {
+    font-size: rem(28);
+  }
+}
+
+.title--large {
+  font-size: rem(28);
+
+  @media (min-width: $screen-desktop) {
+    font-size: rem(33);
+  }
+}
+
+.title--larger {
+  font-size: rem(33);
+
+  @media (min-width: $screen-desktop) {
+    font-size: rem(40);
+  }
+}
+
+// Colors
+.title--strong {
+  color: $dark-gray;
+}
+
+.title--interactive {
+  color: $primary;
+}
+
+.title--inverted {
+  color: white;
+}

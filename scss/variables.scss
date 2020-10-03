@@ -1,0 +1,93 @@
+@function rem($size, $context: $font-size) {
+  @return (($size * 1px) / $context) * 1rem;
+}
+
+$blue500: #304FFE;
+$blue000: #EDF2FF;
+$blue400: #406FFC;
+$red100: #FCCF02;
+$red000: #FFEBEC;
+$red500: #DA1E28;
+$cyan800: #002850;
+$dark-gray: #002850;
+
+$primary: $blue500;
+$primary-deep: $blue400;
+$secondary: $red500;
+$secondary-deep: $red100;
+
+// fonts
+$font-weight-light: 400;
+$font-weight-regular: 500;
+$font-weight-heavy: 700;
+$font-height: 1.5;
+$font-family: "Red Hat Text", sans-serif;
+$font-size: 16px !default;
+$font-weight-normal: 400 !default;
+$font-weight-bold: 700 !default;
+
+$border-radius-small: 2px !default;
+$border-radius: 4px !default;
+$border-radius-circle: 50%;
+
+$border-width-large: 4px;
+$border-width-medium: 2px;
+$border-width-small: 1px;
+
+$low-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+$high-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.24);
+$higher-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.32);
+
+$easing: ease-out !default;
+$speed: 0.3s !default;
+$check-speed: 0.1s !default;
+
+$size-xxs: 2px !default;
+$size-xs:  4px !default;
+$size-s:   8px !default;
+$size-m:   16px !default;
+$size-st:  24px !default;
+$size-l:   32px !default;
+$size-xl:  40px !default;
+$size-xxl: 48px !default;
+$size-j:   64px !default;
+
+$space-xxs: $size-xxs !default;
+$space-xs:  $size-xs !default;
+$space-s:   $size-s !default;
+$space-m:   $size-m !default;
+$space-st:  $size-st !default;
+$space-l:   $size-l !default;
+$space-xl:  $size-xl !default;
+$space-xxl: $size-xxl !default;
+$space-j:   $size-j !default;
+
+// Breakpoints
+$screen-xs: 480px !default;
+$screen-xs-min: $screen-xs !default;
+$screen-phone: $screen-xs-min !default;
+$screen-sm: 768px !default;
+$screen-sm-min: $screen-sm !default;
+$screen-tablet: $screen-sm-min !default;
+$screen-md: 992px !default;
+$screen-md-min: $screen-md !default;
+$screen-desktop: $screen-md-min !default;
+$screen-lg: 1200px !default;
+$screen-lg-min: $screen-lg !default;
+$screen-lg-desktop: $screen-lg-min !default;
+$screen-xs-max: $screen-sm-min - 1 !default;
+$screen-sm-max: $screen-md-min - 1 !default;
+$screen-md-max: $screen-lg-min - 1 !default;
+
+// Opacity
+
+$opacity-base: .8;
+
+$dark-gray: #002850;
+
+$toast-container-width: 1200px;
+$toast-gutter: 15px;
+
+$text-size-small: rem(13);
+$text-size: rem(16);
+$text-size-large: rem(19);

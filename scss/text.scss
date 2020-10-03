@@ -1,0 +1,60 @@
+@import 'scss/variables.scss';
+
+.text {
+  color: $dark-gray;
+  font-family: $font-family;
+  font-size: rem(16);
+  font-weight: $font-weight-normal;
+  letter-spacing: normal;
+  line-height: 1.5em;
+  text-transform: none;
+}
+
+// Behavior
+.text--center {
+  text-align: center;
+}
+
+.text--left {
+  text-align: left;
+}
+
+.text--right {
+  text-align: right;
+}
+
+// Sizes
+
+.text--micro {
+  font-size: rem(10);
+}
+
+.text--small {
+  font-size: rem(13);
+}
+
+.text--medium {
+  font-size: rem(16);
+}
+
+.text--large {
+  font-size: rem(16);
+
+  @media (min-width: $screen-desktop) {
+    font-size: rem(19);
+  }
+}
+
+// Colors
+.text--strong {
+  color: $dark-gray;
+}
+
+.text--interactive {
+  color: $primary;
+  font-weight: $font-weight-bold;
+}
+
+.text--inverted {
+  color: white;
+}
