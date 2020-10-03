@@ -44,6 +44,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "encoding": "^0.1.13",
     "faunadb": "^3.0.1"
   }
 }
