@@ -1,4 +1,5 @@
 import CustomComponent from "../../extends/custom-component";
+import StartupsService from "../../services/startups-service";
 
 export default class Slider extends CustomComponent {
   currentSlideIndex: number = 0;
@@ -9,6 +10,9 @@ export default class Slider extends CustomComponent {
 
     this.render(container);
     this.initSlider();
+
+    // TODO Remove me
+    console.log(StartupsService.getAll());
   }
 
   previous() {

@@ -8,25 +8,46 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     compress: true,
-    port: 9000
+    port: 9001,
+    proxy: {
+      '/.netlify/functions': {
+        target: 'http://0.0.0.0:9000',
+        pathRewrite: { "^/\\.netlify/functions" : ''}
+      }
+    }
   },
   module: {
     rules: [
       {
         test:  /\.ts/,
         use: 'ts-loader',
-        include: [path.resolve(__dirname, 'src')]
+        include: [path.resolve(__dirname, 'src')],
+        exclude: [
+          path.resolve(__dirname, 'scripts'),
+          path.resolve(__dirname, 'functions'),
+          path.resolve(__dirname, 'built-lambda'),
+        ]
       },
       {
         test: /\.html$/,
         loader: 'html-loader',
         include: [path.resolve(__dirname, 'src')],
-        exclude: path.resolve(__dirname, 'src/index.html'),
+        exclude: [
+          path.resolve(__dirname, 'src/index.html'),
+          path.resolve(__dirname, 'scripts'),
+          path.resolve(__dirname, 'functions'),
+          path.resolve(__dirname, 'built-lambda'),
+        ]
       },
       {
         test: /\.scss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
-        include: [path.resolve(__dirname, 'src')]
+        include: [path.resolve(__dirname, 'src')],
+        exclude: [
+          path.resolve(__dirname, 'scripts'),
+          path.resolve(__dirname, 'functions'),
+          path.resolve(__dirname, 'built-lambda'),
+        ]
       }
     ]
   },
