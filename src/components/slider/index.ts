@@ -1,4 +1,5 @@
 import CustomComponent from "../../extends/custom-component";
+import StartupsService from "../../services/startups-service";
 
 export default class Slider extends CustomComponent {
 
@@ -8,9 +9,7 @@ export default class Slider extends CustomComponent {
     this.render(container);
 
     // TODO Remove me
-    fetch('/.netlify/functions/startups-read-all').then((response) => {
-      console.log(response);
-    });
+    console.log(StartupsService.getAll());
   }
 
   previous() {
