@@ -1,8 +1,8 @@
 import Component from '../interfaces/component';
 
-export default class CustomComponent {
-  component: Component;
-  template: String = '';
+export default abstract class CustomComponent {
+  public component: Component;
+  template: string = '';
 
   constructor(component: Component) {
     this.component = component;
@@ -20,23 +20,62 @@ export default class CustomComponent {
     }
   }
 
-  applyParamsToTemplate(params: any) {
-    Object.keys(params).forEach((key) => {
-      this.template = this.template.replace(new RegExp(`{{ ${key} }}`, 'g'), params[key]);
-    });
+  applyParamsToTemplate(template: string, params: any, prefix?: any) {
+    if (prefix) {
+      Object.keys(params).forEach((key) => {
+        template = template.replace(new RegExp(`{{ ${prefix}.${key} }}`, 'g'), params[key]);
+      });
+    } else {
+      Object.keys(params).forEach((key) => {
+        template = template.replace(new RegExp(`{{ ${key} }}`, 'g'), params[key]);
+      });
+    }
+
+    return template;
   }
 
-  bindListeners(element: DocumentFragment) {
+  bindListeners(element: HTMLElement) {
     const clickListeners = element.querySelectorAll('[data-click]');
+
     clickListeners.forEach((elementToBind) => {
       const functionName = elementToBind.getAttribute('data-click');
 
       if (functionName) {
         // @ts-expect-error
-        elementToBind.addEventListener('click', this[functionName])
+        elementToBind.addEventListener('click', this[functionName].bind(this))
         elementToBind.removeAttribute('click');
       }
     });
+  }
+
+  compileRepeats(element: HTMLElement) {
+    const elementsToRepeat = element.querySelectorAll('[data-repeat]');
+
+    elementsToRepeat.forEach((elementToRepeat) => {
+      const parent = elementToRepeat.parentElement;
+      const paramKey = elementToRepeat.getAttribute('data-repeat');
+      const objectKey = elementToRepeat.getAttribute('data-repeat-prop');
+
+      if (!paramKey || !parent) {
+        throw new Error("data-repeat without key value or parent");
+      }
+
+      const data = this.component.templateParams[paramKey];
+
+      data.forEach((item: Object) => {
+        let elementHtml = elementToRepeat.outerHTML;
+        elementHtml = this.applyParamsToTemplate(elementHtml, item, objectKey);
+        parent.appendChild(this.createElement(elementHtml));
+      });
+
+      elementToRepeat.remove();
+    });
+  }
+
+  createElement(template: string){
+    let templateElement = document.createElement('template');
+    templateElement.innerHTML += template;
+    return templateElement.content;
   }
 
   render(container: HTMLElement) {
@@ -44,15 +83,13 @@ export default class CustomComponent {
 
     this.template = this.componentTemplate;
     if (this.component.templateParams) {
-      this.applyParamsToTemplate(this.component.templateParams);
+      this.applyParamsToTemplate(this.template, this.component.templateParams);
     }
 
-    let template = document.createElement('template');
-    template.innerHTML += this.template;
-    this.component.elementRef = template.content;
-
-    this.bindListeners(this.component.elementRef);
-
+    const fragment = <HTMLElement><any>this.createElement(this.template);
+    this.compileRepeats(fragment);
+    this.bindListeners(fragment);
+    this.component.elementRef = <HTMLElement>fragment.children[0];
     container.appendChild(this.component.elementRef);
   }
 }
