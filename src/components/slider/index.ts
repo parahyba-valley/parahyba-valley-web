@@ -4,10 +4,14 @@ import StartupsService from "../../services/startups-service";
 export default class Slider extends CustomComponent {
   currentSlideIndex: number = 0;
   sliders!: HTMLCollectionOf<HTMLElement>;
+  startups = [];
 
   constructor(container: HTMLElement) {
-    super({ name: 'slider', templateParams: { sliders: StartupsService.getAll() } });
-
+    super({ name: 'slider' });
+    StartupsService.getAll().then((response) => {
+      this.startups = response;
+    });
+    this.component.templateParams = this.startups;
     this.render(container);
     this.initSlider();
   }
@@ -56,12 +60,6 @@ export default class Slider extends CustomComponent {
     if (this.sliders?.length) {
       for( let i = 0; i < this.sliders?.length; i++) {
         this.sliders[i].style.left = 100 * i + '%';
-        var x = Math.floor(Math.random() * 256);
-        var y = Math.floor(Math.random() * 256);
-        var z = Math.floor(Math.random() * 256);
-        var bgColor = "rgb(" + x + "," + y + "," + z + ")";
-
-        this.sliders[i].style.background = bgColor;
       }
     }
   }
