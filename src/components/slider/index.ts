@@ -7,7 +7,7 @@ export default class Slider extends CustomComponent {
   startups = [];
 
   constructor(container: HTMLElement) {
-    super({ name: 'slider' });
+    super({ name: 'slider', templateParams: [] });
     StartupsService.getAll().then((response) => {
       this.startups = response;
     });
