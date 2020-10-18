@@ -1,5 +1,6 @@
 import Slider from './components/slider';
 import Header from './components/header';
+import StartupsService from "./services/startups-service";
 import './index.scss';
 
 export default class Index {
@@ -12,7 +13,11 @@ export default class Index {
 
   render() {
     new Header(this.element);
-    new Slider(this.element);
+
+    StartupsService.getAll().then((response) => {
+      console.log(response);
+      new Slider(this.element, response);
+    });
   }
 };
 

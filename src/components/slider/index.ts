@@ -1,17 +1,12 @@
 import CustomComponent from "../../extends/custom-component";
-import StartupsService from "../../services/startups-service";
 
 export default class Slider extends CustomComponent {
   currentSlideIndex: number = 0;
   sliders!: HTMLCollectionOf<HTMLElement>;
-  startups = [];
 
-  constructor(container: HTMLElement) {
-    super({ name: 'slider', templateParams: [] });
-    StartupsService.getAll().then((response) => {
-      this.startups = response;
-    });
-    this.component.templateParams = this.startups;
+  constructor(container: HTMLElement, sliderData: any) {
+    super({ name: 'slider', templateParams: { sliders: sliderData } });
+
     this.render(container);
     this.initSlider();
   }
