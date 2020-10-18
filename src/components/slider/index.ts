@@ -6,13 +6,10 @@ export default class Slider extends CustomComponent {
   sliders!: HTMLCollectionOf<HTMLElement>;
 
   constructor(container: HTMLElement) {
-    super({ name: 'slider', templateParams: { sliders: [{ name: 'blá' }, { name: 'bló' }]} });
+    super({ name: 'slider', templateParams: { sliders: StartupsService.getAll() } });
 
     this.render(container);
     this.initSlider();
-
-    // TODO Remove me
-    console.log(StartupsService.getAll());
   }
 
   previous() {
