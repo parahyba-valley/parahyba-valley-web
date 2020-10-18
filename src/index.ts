@@ -13,7 +13,6 @@ export default class Index {
 
   render() {
     new Header(this.element);
-
     StartupsService.getAll().then((response) => {
       new Slider(this.element, response);
     });

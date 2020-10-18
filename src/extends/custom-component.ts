@@ -20,16 +20,30 @@ export default abstract class CustomComponent {
     }
   }
 
+  populateTemplate(path: any, object: any, template: any, key: any) {
+    if (!(typeof object === 'object' && object !== null)) {
+      return template.replace(new RegExp(`{{ ${path} }}`, 'g'), object);
+    }
+    Object.keys(object).forEach((key) => {
+      const new_path = path === "" ? path + `${key}` : path + `.${key}`
+      template = this.populateTemplate(new_path, object[key], template, key);
+    });
+
+    return template;
+  }
+
   applyParamsToTemplate(template: string, params: any, prefix?: any) {
     if (prefix) {
       Object.keys(params).forEach((key) => {
-        template = template.replace(new RegExp(`{{ ${prefix}.${key} }}`, 'g'), params[key]);
+        template = this.populateTemplate("", params, template, key);
       });
     } else {
       Object.keys(params).forEach((key) => {
         template = template.replace(new RegExp(`{{ ${key} }}`, 'g'), params[key]);
       });
     }
+
+    console.log(template);
 
     return template;
   }

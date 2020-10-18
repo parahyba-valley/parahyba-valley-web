@@ -6,9 +6,6 @@ export default class Slider extends CustomComponent {
 
   constructor(container: HTMLElement, sliderData: any) {
     super({ name: 'slider', templateParams: { sliders: sliderData } });
-    console.log('é hoje');
-    console.log(sliderData);
-    console.log('cabo');
     this.render(container);
     this.initSlider();
   }
