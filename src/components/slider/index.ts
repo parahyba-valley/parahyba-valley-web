@@ -55,6 +55,12 @@ export default class Slider extends CustomComponent {
     if (this.sliders?.length) {
       for( let i = 0; i < this.sliders?.length; i++) {
         this.sliders[i].style.left = 100 * i + '%';
+        var x = Math.floor(Math.random() * 256);
+        var y = Math.floor(Math.random() * 256);
+        var z = Math.floor(Math.random() * 256);
+        var bgColor = "rgb(" + x + "," + y + "," + z + ")";
+
+        this.sliders[i].style.background = bgColor;
       }
     }
   }
