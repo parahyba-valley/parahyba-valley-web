@@ -2,10 +2,14 @@
 
 .slider {
   background-color: red;
-  height: 100%;
+  height: calc(100% - 78px);
   overflow: hidden;
   position: relative;
   width: 100%;
+
+  @media (max-width: $screen-phone) {
+    height: calc(100% - 67px);
+  }
 }
 
 .slider__control {
