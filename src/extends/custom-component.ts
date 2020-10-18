@@ -43,8 +43,6 @@ export default abstract class CustomComponent {
       });
     }
 
-    console.log(template);
-
     return template;
   }
 

@@ -13,8 +13,9 @@ export default class Index {
 
   render() {
     new Header(this.element);
-    StartupsService.getAll().then((response) => {
-      new Slider(this.element, response);
+    // new Slider(this.element, [{data: { name: 'hey'}}, {data: { name: 'hi'}}]); // DEVELOPMENT
+    StartupsService.getAll().then((response) => { // PROD
+      new Slider(this.element, response.sort(() => .5 - Math.random()));
     });
   }
 };

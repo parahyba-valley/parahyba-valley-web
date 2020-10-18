@@ -1,7 +1,6 @@
 @import 'scss/variables.scss';
 
 .slider {
-  background-color: red;
   height: calc(100% - 78px);
   overflow: hidden;
   position: relative;
@@ -41,7 +40,6 @@
 }
 
 .slider__slide {
-  background-color: yellow;
   height: 100%;
   position: absolute;
   width: 100%;
