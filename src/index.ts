@@ -15,7 +15,6 @@ export default class Index {
     new Header(this.element);
 
     StartupsService.getAll().then((response) => {
-      console.log(response);
       new Slider(this.element, response);
     });
   }
