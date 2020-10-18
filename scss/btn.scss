@@ -1,0 +1,84 @@
+@import 'scss/variables.scss';
+
+.btn {
+  align-items: center;
+  border: $border-width-small solid;
+  border-radius: $border-radius;
+  cursor: pointer;
+  display: flex;
+  font-size: $text-size;
+  font-weight: $font-weight-bold;
+  justify-content: center;
+  min-height: $size-xxl;
+  padding: $space-s $space-st;
+  text-align: center;
+  transition: all $speed $easing;
+  user-select: none;
+
+  @media (min-width: $screen-desktop) {
+    display: inline-flex;
+    width: auto;
+  }
+}
+
+// Primary
+
+.btn--primary {
+  background-color: $primary;
+  border-color: $primary-deep;
+  color: white;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.btn--is-active {
+    background-color: $primary-deep;
+    border-color: $primary-deep;
+    color: white;
+  }
+}
+
+// Secondary
+
+.btn--secondary {
+  background-color: $secondary;
+  border-color: $primary;
+  color: $primary;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.btn--is-active {
+    background-color: $secondary-deep;
+    border-color: $primary-deep;
+    color: white;
+  }
+}
+
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+
+// Sizes
+
+.btn--small {
+  font-size: $text-size-small;
+  min-height: $size-l;
+  padding-left: $space-s;
+  padding-right: $space-s;
+}
+
+.btn--medium {
+  font-size: $text-size;
+  min-height: $size-xxl;
+  padding-left: $space-m;
+  padding-right: $space-m;
+}
+
+.btn--large {
+  font-size: $text-size-large;
+  min-height: 56px;
+  padding-left: $space-l;
+  padding-right: $space-l;
+}

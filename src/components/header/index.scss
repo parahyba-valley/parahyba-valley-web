@@ -1,0 +1,22 @@
+@import 'scss/variables.scss';
+@import 'scss/btn.scss';
+
+.sign-up-button {
+  margin-top: 7px;
+  margin-bottom: 7px;
+
+  @media (max-width: $screen-phone) {
+    font-size: $text-size-small;
+    min-height: $size-l;
+    padding-left: $space-s;
+    padding-right: $space-s;
+  }
+}
+
+.logo {
+  height: 55px;
+
+  @media (max-width: $screen-phone) {
+    height: 44px;
+  }
+}

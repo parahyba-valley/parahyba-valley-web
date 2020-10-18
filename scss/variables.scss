@@ -1,28 +1,25 @@
+@import url(https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;500;700&display=swap);
+
 @function rem($size, $context: $font-size) {
   @return (($size * 1px) / $context) * 1rem;
 }
 
-$blue500: #304FFE;
+$green500: #28a745;
+$green400: #208737;
+$blue500: #007bff;
+$blue400: #0068d7;
 $blue000: #EDF2FF;
-$blue400: #406FFC;
-$red100: #FCCF02;
-$red000: #FFEBEC;
-$red500: #DA1E28;
-$cyan800: #002850;
-$dark-gray: #002850;
+$cyan800: #066282;
+$yellow500: #fdcc52;
 
 $primary: $blue500;
 $primary-deep: $blue400;
-$secondary: $red500;
-$secondary-deep: $red100;
+$secondary: $green500;
+$secondary-deep: $green400;
 
-// fonts
-$font-weight-light: 400;
-$font-weight-regular: 500;
-$font-weight-heavy: 700;
-$font-height: 1.5;
 $font-family: "Red Hat Text", sans-serif;
 $font-size: 16px !default;
+
 $font-weight-normal: 400 !default;
 $font-weight-bold: 700 !default;
 
@@ -63,6 +60,7 @@ $space-xxl: $size-xxl !default;
 $space-j:   $size-j !default;
 
 // Breakpoints
+
 $screen-xs: 480px !default;
 $screen-xs-min: $screen-xs !default;
 $screen-phone: $screen-xs-min !default;
@@ -83,11 +81,15 @@ $screen-md-max: $screen-lg-min - 1 !default;
 
 $opacity-base: .8;
 
-$dark-gray: #002850;
-
 $toast-container-width: 1200px;
 $toast-gutter: 15px;
 
 $text-size-small: rem(13);
 $text-size: rem(16);
 $text-size-large: rem(19);
+
+// fonts
+$font-weight-light: 400;
+$font-weight-regular: 500;
+$font-weight-heavy: 700;
+$font-height: 1.5;

@@ -1,4 +1,5 @@
 import Slider from './components/slider';
+import Header from './components/header';
 import './index.scss';
 
 export default class Index {
@@ -10,6 +11,7 @@ export default class Index {
   }
 
   render() {
+    new Header(this.element);
     new Slider(this.element);
   }
 };
