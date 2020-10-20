@@ -74,8 +74,9 @@ export default abstract class CustomComponent {
 
       const data = this.component.templateParams[paramKey];
 
-      data.forEach((item: Object) => {
+      data.forEach((item: Object, key: string) => {
         let elementHtml = elementToRepeat.outerHTML;
+        elementHtml = this.populateTemplate('index', key, elementHtml, null);
         elementHtml = this.applyParamsToTemplate(elementHtml, item, objectKey);
         parent.appendChild(this.createElement(elementHtml));
       });

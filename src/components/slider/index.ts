@@ -10,17 +10,17 @@ export default class Slider extends CustomComponent {
     this.initSlider();
   }
 
-  previous() {
+  previous(_?: Event, times = 1) {
     if (this.currentSlideIndex - 1 < 0) {
       return;
     }
 
     for(let i = 0; i < this.sliders?.length; i++) {
       const currentLeft = parseInt(this.sliders[i].style.left.split('%')[0]);
-      this.sliders[i].style.left = currentLeft + 100 + '%';
+      this.sliders[i].style.left = currentLeft + (100 * times) + '%';
     }
 
-    this.currentSlideIndex = this.currentSlideIndex - 1;
+    this.currentSlideIndex = this.currentSlideIndex - times * 1;
 
     if (this.currentSlideIndex - 1 < 0) {
       this.turnControlHidden('slider__control--left');
@@ -29,17 +29,17 @@ export default class Slider extends CustomComponent {
     this.turnControlVisible('slider__control--right');
   }
 
-  next() {
+  next(_?: Event, times = 1) {
     if (this.currentSlideIndex + 1 >= this.sliders?.length) {
       return;
     }
 
     for(let i = 0; i < this.sliders?.length; i++) {
       const currentLeft = parseInt(this.sliders[i].style.left.split('%')[0]);
-      this.sliders[i].style.left = currentLeft - 100 + '%';
+      this.sliders[i].style.left = currentLeft - (100 * times )+ '%';
     }
 
-    this.currentSlideIndex = this.currentSlideIndex + 1;
+    this.currentSlideIndex = this.currentSlideIndex + times * 1;
 
     if (this.currentSlideIndex + 1 >= this.sliders?.length) {
       this.turnControlHidden('slider__control--right');
@@ -54,6 +54,12 @@ export default class Slider extends CustomComponent {
     if (this.sliders?.length) {
       for( let i = 0; i < this.sliders?.length; i++) {
         this.sliders[i].style.left = 100 * i + '%';
+        var x = Math.floor(Math.random() * 256);
+        var y = Math.floor(Math.random() * 256);
+        var z = Math.floor(Math.random() * 256);
+        var bgColor = "rgb(" + x + "," + y + "," + z + ")";
+
+        this.sliders[i].style.background = bgColor;
       }
     }
   }
@@ -71,6 +77,16 @@ export default class Slider extends CustomComponent {
 
     if(control) {
       control.classList.add('slider__control--hidden');
+    }
+  }
+
+  changeActiveSlide(event: any) {
+    const index = event.currentTarget.getAttribute('data-index');
+
+    if (index < this.currentSlideIndex) {
+      this.previous(undefined, this.currentSlideIndex - index);
+    } else {
+      this.next(undefined, index - this.currentSlideIndex);
     }
   }
 }

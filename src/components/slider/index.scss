@@ -45,6 +45,28 @@
   width: 100%;
   top: 0;
   left: 100%;
-  transition: left 1s linear;
-  transition: right 1s linear;
+  transition: left 1s ease;
+}
+
+.slider__control-indicators {
+  position: absolute;
+  bottom: $space-m;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.slider__control-indicators__item {
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: white;
+  width: $size-m;
+  height: $size-m;
+  margin: 0 $size-s;
+  display: inline-block;
+}
+
+.slider__control-indicators__item--active {
+  width: $size-st;
+  height: $size-st;
 }

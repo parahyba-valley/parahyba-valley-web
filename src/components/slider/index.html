@@ -9,4 +9,14 @@
   <div class="slider__slide" data-repeat-prop="slider" data-repeat="sliders">
     <div>{{ data.name }}</div>
   </div>
+
+  <div class="slider__control-indicators">
+    <div
+      class="slider__control-indicators__item"
+      data-click="changeActiveSlide"
+      data-repeat-prop="slider"
+      data-repeat="sliders"
+      data-index="{{ index }}"
+    />
+  </div>
 </div>
