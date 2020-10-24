@@ -85,6 +85,20 @@ export default abstract class CustomComponent {
     });
   }
 
+  compileRefs(element: HTMLElement) {
+    const elementsToCompile = element.querySelectorAll('[ref]');
+
+    elementsToCompile.forEach((elementToRef) => {
+      const ref = elementToRef.getAttribute('ref');
+      if (!ref) {
+        throw new Error("elements can't have an empty ref attribute");
+      }
+
+      // @ts-expect-error
+      this[ref] = elementToRef;
+    });
+  }
+
   createElement(template: string){
     let templateElement = document.createElement('template');
     templateElement.innerHTML += template;
@@ -101,6 +115,7 @@ export default abstract class CustomComponent {
 
     const fragment = <HTMLElement><any>this.createElement(this.template);
     this.compileRepeats(fragment);
+    this.compileRefs(fragment);
     this.bindListeners(fragment);
     this.component.elementRef = <HTMLElement>fragment.children[0];
     container.appendChild(this.component.elementRef);

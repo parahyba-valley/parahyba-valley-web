@@ -6,17 +6,24 @@
   <div class="slider__control slider__control--right" data-click="next">
 
   </div>
-  <div class="slider__slide" data-repeat-prop="slider" data-repeat="sliders">
-    <div>{{ data.name }}</div>
+
+  <div class="slider__slides" ref="slides">
+    <div class="slider__slides__item" data-repeat-prop="slider" data-repeat="slides">
+      {{ data.name }}
+    </div>
   </div>
 
   <div class="slider__control-indicators">
-    <div
-      class="slider__control-indicators__item"
-      data-click="changeActiveSlide"
-      data-repeat-prop="slider"
-      data-repeat="sliders"
-      data-index="{{ index }}"
-    />
+    <div class="slider__control-indicators__wrapper">
+      <div class="slider__control-indicators__itens" ref="indicators">
+        <div
+          class="slider__control-indicators__item"
+          data-click="changeActiveSlide"
+          data-repeat-prop="slider"
+          data-repeat="slides"
+          data-index="{{ index }}"
+        />
+      </div>
+    </div>
   </div>
 </div>
