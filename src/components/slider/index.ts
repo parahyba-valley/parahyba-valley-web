@@ -11,12 +11,17 @@ export default class Slider extends CustomComponent {
     super({ name: 'slider', templateParams: { slides: sliderData } });
     this.sliderData = sliderData;
     this.render(container);
-    addEventListener("visibilitychange", this.onVisibilityChanged);
-    addEventListener("mozvisibilitychange", this.onVisibilityChanged);
-    addEventListener("webkitvisibilitychange", this.onVisibilityChanged);
-    addEventListener("msvisibilitychange", this.onVisibilityChanged);
-
     this.initSlider();
+
+    addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        // The tab has lost focus
+        clearInterval(this.sliderIntervalController);
+      } else {
+        // The tab has gained focus
+        this.createSliderInterval();
+      }
+    });
   }
 
   previous() {
@@ -92,15 +97,5 @@ export default class Slider extends CustomComponent {
   changeActiveSlide(event: any) {
     const indicatorIndex = event.currentTarget.getAttribute('data-index');
     this.moveSlides(indicatorIndex - this.currentSlideIndex);
-  }
-
-  onVisibilityChanged() {
-    if (document.hidden) {
-      // The tab has lost focus
-      clearInterval(this.sliderIntervalController);
-    } else {
-      // The tab has gained focus
-      this.createSliderInterval();
-    }
   }
 }
