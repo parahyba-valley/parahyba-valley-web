@@ -11,11 +11,12 @@ export default class Slider extends CustomComponent {
     super({ name: 'slider', templateParams: { slides: sliderData } });
     this.sliderData = sliderData;
     this.render(container);
+    addEventListener("visibilitychange", this.onVisibilityChanged);
+    addEventListener("mozvisibilitychange", this.onVisibilityChanged);
+    addEventListener("webkitvisibilitychange", this.onVisibilityChanged);
+    addEventListener("msvisibilitychange", this.onVisibilityChanged);
+
     this.initSlider();
-    document.addEventListener("visibilitychange", this.onVisibilityChanged, false);
-    document.addEventListener("mozvisibilitychange", this.onVisibilityChanged, false);
-    document.addEventListener("webkitvisibilitychange", this.onVisibilityChanged, false);
-    document.addEventListener("msvisibilitychange", this.onVisibilityChanged, false);
   }
 
   previous() {
