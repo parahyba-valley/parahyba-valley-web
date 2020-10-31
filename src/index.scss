@@ -7,6 +7,7 @@ body {
   left: 0;
   top: 0;
   font-size: 100%;
+  background: url(assets/bg-pattern.png);
 }
 
 * {
@@ -192,36 +193,4 @@ $breakpoint-large: 60em; // 960px
   .hidden-sm {
     display: block;
   }
-}
-
-.section {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding-top: $space-l;
-  padding-bottom: $space-l;
-
-  &:first-child {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-  &:last-child {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-}
-
-.section__container {
-  padding-left: $space-m;
-  padding-right: $space-m;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  width: 100%;
-}
-
-.section--blue {
-  background: $blue000;
 }

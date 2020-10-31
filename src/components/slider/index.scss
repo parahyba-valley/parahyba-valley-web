@@ -12,7 +12,7 @@
 }
 
 .slider__control {
-  border: solid black;
+  border: solid $blue500;
   border-width: 0 3px 3px 0;
   cursor: pointer;
   display: inline-block;
@@ -82,12 +82,13 @@
 .slider__control-indicators__item {
   border-radius: 50%;
   cursor: pointer;
-  background-color: black;
+  background-color: $blue500;
   width: $size-s;
   height: $size-s;
   margin: 0 $size-xs;
   display: inline-block;
   transition: all 100ms ease;
+  border: 1px solid #eaeaea;
 }
 
 
@@ -99,4 +100,5 @@
 .slider__control-indicators__item--active {
   width: $size-m;
   height: $size-m;
+  background-color: $blue500;
 }

@@ -76,16 +76,6 @@ export default class Slider extends CustomComponent {
   initSlider() {
     this.moveIndicators(0);
     this.createSliderInterval();
-
-    for( let i = 0; i < this.sliderData?.length; i++) {
-      var x = Math.floor(Math.random() * 256);
-      var y = Math.floor(Math.random() * 256);
-      var z = Math.floor(Math.random() * 256);
-      var bgColor = "rgb(" + x + "," + y + "," + z + ", 0.2)";
-
-      // @ts-expect-error
-      this.slides.children[i].style.background = bgColor;
-    }
   }
 
   createSliderInterval() {
