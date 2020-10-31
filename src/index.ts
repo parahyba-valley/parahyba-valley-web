@@ -13,7 +13,7 @@ export default class Index {
 
   render() {
     new Header(this.element);
-    // new Slider(this.element, [{data: { name: 'hey'}}, {data: { name: 'hi'}}]); // DEVELOPMENT
+    //new Slider(this.element, [{data: { name: 'hey'}}, {data: { name: 'hi'}}, {data: { name: 'hix'}}, {data: { name: 'hia'}}, {data: { name: 'hi1'}}, {data: { name: 'hi2'}}, {data: { name: 'hi3'}}, {data: { name: 'hi4'}},]); // DEVELOPMENT
     StartupsService.getAll().then((response) => { // PROD
       new Slider(this.element, response.sort(() => .5 - Math.random()));
     });
