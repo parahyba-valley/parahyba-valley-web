@@ -122,8 +122,7 @@ export default class Slider extends CustomComponent {
     }, 8000);
   }
 
-  changeActiveSlide(event: any) {
-    const indicatorIndex = event.currentTarget.getAttribute('data-index');
+  changeActiveSlide(indicatorIndex: number) {
     this.moveSlides(indicatorIndex - this.currentSlideIndex);
   }
 }

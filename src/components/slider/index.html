@@ -1,7 +1,7 @@
 <div class="slider">
-  <div class="slider__control slider__control--left" data-click="previous"></div>
+  <div class="slider__control slider__control--left" pvClick="previous"></div>
 
-  <div class="slider__control slider__control--right" data-click="next"></div>
+  <div class="slider__control slider__control--right" pvClick="next"></div>
 
   <div class="slider__slides" ref="slides">
     <div class="slider__slides__item" pvFor="slide in slides">
@@ -15,9 +15,8 @@
       <div class="slider__control-indicators__itens" ref="indicators">
         <div
           class="slider__control-indicators__item"
-          data-click="changeActiveSlide"
+          pvClick="changeActiveSlide(index, 'teste')"
           pvFor="slide in slides"
-          data-index="{{ index }}"
         />
       </div>
     </div>

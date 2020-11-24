@@ -44,16 +44,67 @@ export default class ParahybaCompiler {
     return finalValue;
   }
 
-  applyParamsToTemplate(template: string): any {
-    const path = template.match(new RegExp('{{ (.*) }}'));
+  templatedReplacedWithScopeParams(text: string): string {
+    if (!text) return '';
+    
+    let textToReplace = text;
+    const path = textToReplace.match(new RegExp('{{ (.*) }}'));
 
     if (path && path[1]) {
       const value = getValueFromScope(path[1], this.scope);
-      template = template.replace(new RegExp(path[0], 'g'), value);
-      return this.applyParamsToTemplate(template);
+      textToReplace = textToReplace.replace(new RegExp(path[0], 'g'), value);
+      textToReplace = this.templatedReplacedWithScopeParams(textToReplace);
     }
 
-    return template;
+    return textToReplace;
+  }
+
+  compileAttributes(element: HTMLElement) {
+    const AttributesToCompile = ['pvClick'];
+
+    AttributesToCompile.forEach((attribute) => {
+      if (element.hasAttribute(attribute)) {
+        const attributeValue =  element.getAttribute(attribute);
+
+        // is a function
+        if (attributeValue && attributeValue.indexOf('(') > -1 && attributeValue.indexOf(')') > -1) {
+          let params = attributeValue.substring(attributeValue.indexOf('(') + 1, attributeValue.indexOf(')'));
+          let paramsSplitted: Array<any> = params.split(',');
+
+          paramsSplitted.forEach((param, index) => {
+            const clearedParam = param.trim();
+            const valueFromScope = getValueFromScope(clearedParam, this.scope);
+            paramsSplitted[index] = valueFromScope !== undefined ? valueFromScope : clearedParam;
+          });
+
+          element.setAttribute(
+            attribute, `${attributeValue.slice(0, attributeValue.indexOf('('))}(${paramsSplitted.join(', ')})`
+          );
+        }
+      }
+    });
+  }
+
+  applyParamsToTemplate(element: HTMLElement) {
+    const childrens = element.children;
+    for (let i = 0; i < childrens.length; i ++ ) {
+      const element = childrens[i] as HTMLElement;
+      this.compileAttributes(element);
+      
+      element.childNodes.forEach((node) => {
+        if (node.nodeType !== 3 && (node as HTMLElement).hasAttribute('pvFor')) {
+          return;
+        }
+        if (node.nodeType === 3) {
+          const elementText = node.nodeValue;
+          if (elementText) {
+            node.nodeValue = this.templatedReplacedWithScopeParams(elementText);
+          }
+        } else {
+          this.applyParamsToTemplate(node as HTMLElement);
+        }
+      });
+    }
   }
 
   createElement(template: string) {
@@ -82,11 +133,12 @@ export default class ParahybaCompiler {
   }
 
   compile(): HTMLElement {
-    let fragment = <HTMLElement><any>this.createElement(this.template).children[0];
+    const fragment = <HTMLElement><any>this.createElement(this.template).children[0];
     this.runDirectives(fragment);
+    this.compileAttributes(fragment);
 
     if (this.scope) {
-      fragment = <HTMLElement><any>this.createElement(this.applyParamsToTemplate(fragment.outerHTML)).children[0];
+      this.applyParamsToTemplate(fragment);
     }
 
     return fragment;

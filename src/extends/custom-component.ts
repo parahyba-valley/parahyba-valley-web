@@ -35,15 +35,29 @@ export default abstract class CustomComponent {
   }
 
   bindListeners(element: HTMLElement) {
-    const clickListeners = element.querySelectorAll('[data-click]');
+    const clickListeners = element.querySelectorAll('[pvClick]');
 
     clickListeners.forEach((elementToBind) => {
-      const functionName = elementToBind.getAttribute('data-click');
+      const functionAttribute = elementToBind.getAttribute('pvClick');
+      if (functionAttribute) {
+        const functionName = functionAttribute.substring(0, functionAttribute.indexOf('(') > -1 ? functionAttribute.indexOf('(') : undefined );
 
-      if (functionName) {
-        // @ts-expect-error
-        elementToBind.addEventListener('click', this[functionName].bind(this))
-        elementToBind.removeAttribute('click');
+        if (functionName) {
+          const functionArgs = functionAttribute.substring(functionAttribute.indexOf('(') + 1, functionAttribute.indexOf(')') || 0);
+
+          if (functionArgs) {
+            const functionArgsSplitted = functionArgs.split(',').map((arg) => Function(`return ${arg}`)());
+            elementToBind.addEventListener('click', () => {
+              // @ts-expect-error
+              this[functionName](...functionArgsSplitted)
+            }, false);
+          } else {
+            // @ts-expect-error
+            elementToBind.addEventListener('click', this[functionName].bind(this))
+          }
+  
+          elementToBind.removeAttribute('pvClick');
+        }
       }
     });
   }

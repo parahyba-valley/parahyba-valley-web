@@ -7,10 +7,10 @@ export const getValueFromScope = (path: string, scope: Object): any => {
     // @ts-expect-error
     currentScope = currentScope[splittedPath[i]];
 
-    if (currentScope) {
+    if (currentScope !== undefined) {
       finalValue = currentScope;
     } else {
-      finalValue = '';
+      finalValue = undefined;
       break;
     }
   }
