@@ -1,12 +1,12 @@
-import Directive from '~/interfaces/directive.interface';
-import ParahybaCompiler from '~/v-parahyba/parahyba-compiler.compiler';
+import IPVDirective from '~/pv-parahyba/interfaces/pv-directive.interface';
+import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
 
 export default class PVFor {
   scope: any;
   element: any;
   value: any | undefined;
 
-  constructor(directive: Directive) {
+  constructor(directive: IPVDirective) {
     this.scope = directive.scope;
     this.element = directive.element;
     this.value = directive.value;
@@ -22,7 +22,7 @@ export default class PVFor {
     const elementHtml = this.element.outerHTML;
 
     data.forEach((item: Object, index: Number) => {
-      const compiledElement = new ParahybaCompiler({ ...this.scope, [dataBasePath]: item, index }, elementHtml).compiledElement;
+      const compiledElement = new PVParahybaCompiler({ ...this.scope, [dataBasePath]: item, index }, elementHtml).compiledElement;
       parent.appendChild(compiledElement);
     });
 

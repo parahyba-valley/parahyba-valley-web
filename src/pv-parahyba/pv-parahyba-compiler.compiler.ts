@@ -1,14 +1,17 @@
-import directives from '~/directives';
-import { getValueFromScope } from '~/utils/index';
+import directives from '~/pv-parahyba/directives';
+import { getValueFromScope } from '~/pv-parahyba/utils/index';
 
-export default class ParahybaCompiler {
+export default class PVParahybaCompiler {
   template: string = '';
   scope: Object;
+  components: object;
   compiledElement: HTMLElement;
-  
-  constructor(scope: Object, template: string = '') {
+  compiledComponents: Array<any> = [];
+
+  constructor(scope: Object, template: string = '', components: object = {}) {
     this.template = template;
     this.scope = scope;
+    this.components = components;
     this.compiledElement = this.compile();
   }
 
@@ -85,6 +88,28 @@ export default class ParahybaCompiler {
     });
   }
 
+  compileComponents(element: HTMLElement) {
+    Object.keys(this.components).forEach((component) => {
+      element.querySelectorAll(component).forEach((componentElement) => {
+        const attributes = componentElement.getAttributeNames();
+        let scopedProperties: object = {};
+
+        attributes.forEach((attribute) => {
+          const attributeValue = componentElement.getAttribute(attribute);
+          
+          if (attributeValue) {
+            // @ts-expect-error
+            scopedProperties[attribute] = getValueFromScope(attributeValue, this.scope);
+          }
+        });
+
+        // @ts-expect-error
+        const compiledComponent = new this.components[component](scopedProperties).render();
+        element.replaceChild(compiledComponent, componentElement);
+      });
+    });
+  }
+
   applyParamsToTemplate(element: HTMLElement) {
     const childrens = element.children;
     for (let i = 0; i < childrens.length; i ++ ) {
@@ -107,10 +132,10 @@ export default class ParahybaCompiler {
     }
   }
 
-  createElement(template: string) {
+  createElement(template: string): HTMLElement {
     let templateElement = document.createElement('template');
     templateElement.innerHTML += template;
-    return templateElement.content;
+    return templateElement.content.children[0] as HTMLElement;
   }
 
   applyDirectiveToElement(element: HTMLElement, directiveName: string, directive: typeof directives): any {
@@ -133,9 +158,10 @@ export default class ParahybaCompiler {
   }
 
   compile(): HTMLElement {
-    const fragment = <HTMLElement><any>this.createElement(this.template).children[0];
+    const fragment = this.createElement(this.template);
     this.runDirectives(fragment);
     this.compileAttributes(fragment);
+    this.compileComponents(fragment);
 
     if (this.scope) {
       this.applyParamsToTemplate(fragment);

@@ -1,16 +1,16 @@
-import CustomComponent from "../../extends/custom-component";
+import PVComponent from "~/pv-parahyba/extends/pv-component";
 
-export default class Slider extends CustomComponent {
+export default class Slider extends PVComponent {
   currentSlideIndex: number = 0;
   slides!: HTMLElement;
   indicators!: HTMLElement;
   sliderData: Array<any>;
   sliderIntervalController: any;
 
-  constructor(container: HTMLElement, sliderData: any) {
-    super({ name: 'slider', templateParams: { slides: sliderData } });
-    this.sliderData = sliderData;
-    this.render(container);
+  constructor(properties: any) {
+    super({ componentPath: 'components/slider', templateParams: { slides: properties.startups } });
+    this.sliderData = properties.startups;
+    this.render();
     this.initSlider();
 
     addEventListener("visibilitychange", () => {

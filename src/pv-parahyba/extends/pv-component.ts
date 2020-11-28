@@ -1,20 +1,32 @@
-import Component from '~/interfaces/component';
-import ParahybaCompiler from '~/v-parahyba/parahyba-compiler.compiler';
+import IPVComponent from '~/pv-parahyba/interfaces/pv-component.interface';
+import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
 
-export default abstract class CustomComponent {
-  public component: Component;
+export default abstract class PVComponent {
+  public component: IPVComponent;
 
-  constructor(component: Component) {
+  constructor(component: IPVComponent) {
     this.component = component;
   }
 
   get componentTemplate() {
-    return require(`../components/${this.component.name}/index.html`);
+    if (this.component.componentPath) {
+      return require(`~/app/${this.component.componentPath}/index.html`);
+    }
+
+    return require(`~/app/index.html`);
+  }
+
+  set templateParams(params: any) {
+    this.component.templateParams = params;
   }
 
   importComponentStyle() {
     try {
-      require(`../components/${this.component.name}/index.scss`);
+      if (this.component.componentPath) {
+        return require(`~/app/${this.component.componentPath}/index.scss`);
+      }
+
+      return require(`~/app/index.scss`);
     } catch(_) {
       return null;
     }
@@ -62,12 +74,20 @@ export default abstract class CustomComponent {
     });
   }
 
-  render(container: HTMLElement) {
+  render(container?: HTMLElement): HTMLElement {
     this.importComponentStyle();
-    const fragment = new ParahybaCompiler(this.component.templateParams, this.componentTemplate).compiledElement;
+    const fragment = new PVParahybaCompiler(
+      this.component.templateParams, this.componentTemplate, this.component?.components
+    ).compiledElement;
+
     this.bindListeners(fragment);
     this.compileRefs(fragment);
     this.component.elementRef = <HTMLElement>fragment;
-    container.appendChild(this.component.elementRef);
+
+    if (container) {
+      container.appendChild(this.component.elementRef);
+    }
+
+    return this.component.elementRef;
   }
 }
