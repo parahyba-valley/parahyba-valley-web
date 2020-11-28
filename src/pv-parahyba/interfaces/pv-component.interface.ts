@@ -1,5 +1,5 @@
 export default interface IPVComponent {
-  templateParams?: any;
+  state?: any;
   componentPath?: string;
   components?: object;
   _self?: any;

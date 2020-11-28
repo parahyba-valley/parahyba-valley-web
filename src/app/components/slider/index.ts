@@ -4,13 +4,15 @@ export default class Slider extends PVComponent {
   currentSlideIndex: number = 0;
   slides!: HTMLElement;
   indicators!: HTMLElement;
-  sliderData: Array<any>;
   sliderIntervalController: any;
 
   constructor(properties: any) {
-    super({ componentPath: 'components/slider', templateParams: { slides: properties.startups } });
+    super({ componentPath: 'components/slider' });
     this._self = this;
-    this.sliderData = properties.startups;
+    this.state = {
+      slides: properties.startups,
+    };
+
     this.render();
     this.initSlider();
 
@@ -34,7 +36,7 @@ export default class Slider extends PVComponent {
   }
 
   moveSlides(times: number) {
-    if (!this.sliderData[this.currentSlideIndex + times]) {
+    if (!this.state.slides[this.currentSlideIndex + times]) {
       return;
     }
 
@@ -51,7 +53,7 @@ export default class Slider extends PVComponent {
   }
 
   checkControlsVisibility() {
-    if (this.currentSlideIndex + 1 >= this.sliderData?.length) {
+    if (this.currentSlideIndex + 1 >= this.state.slides.length) {
       this.turnControlHidden('slider__control--right');
     } else {
       this.turnControlVisible('slider__control--right');

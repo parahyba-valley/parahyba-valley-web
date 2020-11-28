@@ -3,9 +3,11 @@ import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
 
 export default abstract class PVComponent {
   public component: IPVComponent;
+  public state: any;
 
   constructor(component: IPVComponent) {
     this.component = component;
+    this.state = {};
   }
 
   get componentTemplate() {
@@ -14,10 +16,6 @@ export default abstract class PVComponent {
     }
 
     return require(`~/app/index.html`);
-  }
-
-  set templateParams(params: any) {
-    this.component.templateParams = params;
   }
 
   set _self(_self: any) {
@@ -53,7 +51,7 @@ export default abstract class PVComponent {
   render(container?: HTMLElement): HTMLElement {
     this.importComponentStyle();
     const fragment = new PVParahybaCompiler(
-      this.component.templateParams, this.componentTemplate, this.component?.components, this.component?._self
+      this.state, this.componentTemplate, this.component?.components, this.component?._self
     ).compiledElement;
 
     this.compileRefs(fragment);

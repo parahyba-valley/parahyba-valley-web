@@ -1,5 +1,5 @@
 export default interface IPVDirective {
-  scope: any;
+  state: any;
   element: HTMLElement;
   value?: any;
 }

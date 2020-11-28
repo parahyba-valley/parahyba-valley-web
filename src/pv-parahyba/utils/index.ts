@@ -1,14 +1,14 @@
-export const getValueFromScope = (path: string, scope: Object): any => {
+export const getvalueFromState = (path: string, state: Object): any => {
   let finalValue = null;
-  let currentScope = scope;
+  let currentState = state;
   const splittedPath = path.split('.');
 
   for(let i = 0; i < splittedPath.length; i++) {
     // @ts-expect-error
-    currentScope = currentScope[splittedPath[i]];
+    currentState = currentState[splittedPath[i]];
 
-    if (currentScope !== undefined) {
-      finalValue = currentScope;
+    if (currentState !== undefined) {
+      finalValue = currentState;
     } else {
       finalValue = undefined;
       break;

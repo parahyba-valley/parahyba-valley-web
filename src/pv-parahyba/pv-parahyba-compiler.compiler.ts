@@ -1,17 +1,17 @@
 import directives from '~/pv-parahyba/directives';
-import { getValueFromScope } from '~/pv-parahyba/utils/index';
+import { getvalueFromState } from '~/pv-parahyba/utils/index';
 
 export default class PVParahybaCompiler {
   template: string = '';
-  scope: object;
+  state: object;
   components: object;
   compiledElement: HTMLElement;
   compiledComponents: Array<any> = [];
   _self: any;
 
-  constructor(scope: Object, template: string = '', components: object = {}, _self?: any) {
+  constructor(state: Object, template: string = '', components: object = {}, _self?: any) {
     this.template = template;
-    this.scope = scope;
+    this.state = state;
     this.components = components;
     this._self = _self;
     this.compiledElement = this.compile();
@@ -29,17 +29,17 @@ export default class PVParahybaCompiler {
     return template;
   }
 
-  getValueFromScope(path: string): any {
+  getvalueFromState(path: string): any {
     let finalValue = null;
-    let currentScope = this.scope;
+    let currentState = this.state;
     const splittedPath = path.split('.');
 
     for(let i = 0; i < splittedPath.length; i++) {
       // @ts-expect-error
-      currentScope = currentScope[splittedPath[i]];
+      currentState = currentState[splittedPath[i]];
 
-      if (currentScope) {
-        finalValue = currentScope;
+      if (currentState) {
+        finalValue = currentState;
       } else {
         finalValue = '';
         break;
@@ -49,16 +49,16 @@ export default class PVParahybaCompiler {
     return finalValue;
   }
 
-  templatedReplacedWithScopeParams(text: string): string {
+  templatedReplacedWithStateParams(text: string): string {
     if (!text) return '';
     
     let textToReplace = text;
     const path = textToReplace.match(new RegExp('{{ (.*) }}'));
 
     if (path && path[1]) {
-      const value = getValueFromScope(path[1], this.scope);
+      const value = getvalueFromState(path[1], this.state);
       textToReplace = textToReplace.replace(new RegExp(path[0], 'g'), value);
-      textToReplace = this.templatedReplacedWithScopeParams(textToReplace);
+      textToReplace = this.templatedReplacedWithStateParams(textToReplace);
     }
 
     return textToReplace;
@@ -78,8 +78,8 @@ export default class PVParahybaCompiler {
 
           paramsSplitted.forEach((param, index) => {
             const clearedParam = param.trim();
-            const valueFromScope = getValueFromScope(clearedParam, this.scope);
-            paramsSplitted[index] = valueFromScope !== undefined ? valueFromScope : clearedParam;
+            const valueFromState = getvalueFromState(clearedParam, this.state);
+            paramsSplitted[index] = valueFromState !== undefined ? valueFromState : clearedParam;
           });
 
           element.setAttribute(
@@ -94,19 +94,19 @@ export default class PVParahybaCompiler {
     Object.keys(this.components).forEach((component) => {
       element.querySelectorAll(component).forEach((componentElement) => {
         const attributes = componentElement.getAttributeNames();
-        let scopedProperties: object = {};
+        let stateToProperties: object = {};
 
         attributes.forEach((attribute) => {
           const attributeValue = componentElement.getAttribute(attribute);
           
           if (attributeValue) {
             // @ts-expect-error
-            scopedProperties[attribute] = getValueFromScope(attributeValue, this.scope);
+            stateToProperties[attribute] = getvalueFromState(attributeValue, this.state);
           }
         });
 
         // @ts-expect-error
-        const compiledComponent = new this.components[component](scopedProperties).render();
+        const compiledComponent = new this.components[component](stateToProperties).render();
         element.replaceChild(compiledComponent, componentElement);
       });
     });
@@ -125,7 +125,7 @@ export default class PVParahybaCompiler {
         if (node.nodeType === 3) {
           const elementText = node.nodeValue;
           if (elementText) {
-            node.nodeValue = this.templatedReplacedWithScopeParams(elementText);
+            node.nodeValue = this.templatedReplacedWithStateParams(elementText);
           }
         } else {
           this.applyParamsToTemplate(node as HTMLElement);
@@ -147,7 +147,7 @@ export default class PVParahybaCompiler {
       const value = directiveElement.getAttribute(directiveName);
       directiveElement.removeAttribute(directiveName);
       const directiveClass = Object.create(directive);
-      directiveClass.constructor.apply(directive, new Array({ scope: this.scope, element: directiveElement, value }));
+      directiveClass.constructor.apply(directive, new Array({ state: this.state, element: directiveElement, value }));
       this.applyDirectiveToElement(element, directiveName, directive);
     }
   }
@@ -195,7 +195,7 @@ export default class PVParahybaCompiler {
       this.bindListeners(fragment);
     }
 
-    if (this.scope) {
+    if (this.state) {
       this.applyParamsToTemplate(fragment);
     }
 
