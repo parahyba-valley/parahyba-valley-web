@@ -107,7 +107,7 @@ export default class PVParahybaCompiler {
 
         // @ts-expect-error
         const compiledComponent = new this.components[component](stateToProperties).render();
-        element.replaceChild(compiledComponent, componentElement);
+        componentElement.parentElement?.replaceChild(compiledComponent, componentElement);
       });
     });
   }
