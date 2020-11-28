@@ -20,6 +20,10 @@ export default abstract class PVComponent {
     this.component.templateParams = params;
   }
 
+  set _self(_self: any) {
+    this.component._self = _self;
+  }
+
   importComponentStyle() {
     try {
       if (this.component.componentPath) {
@@ -46,41 +50,12 @@ export default abstract class PVComponent {
     });
   }
 
-  bindListeners(element: HTMLElement) {
-    const clickListeners = element.querySelectorAll('[pvClick]');
-
-    clickListeners.forEach((elementToBind) => {
-      const functionAttribute = elementToBind.getAttribute('pvClick');
-      if (functionAttribute) {
-        const functionName = functionAttribute.substring(0, functionAttribute.indexOf('(') > -1 ? functionAttribute.indexOf('(') : undefined );
-
-        if (functionName) {
-          const functionArgs = functionAttribute.substring(functionAttribute.indexOf('(') + 1, functionAttribute.indexOf(')') || 0);
-
-          if (functionArgs) {
-            const functionArgsSplitted = functionArgs.split(',').map((arg) => Function(`return ${arg}`)());
-            elementToBind.addEventListener('click', () => {
-              // @ts-expect-error
-              this[functionName](...functionArgsSplitted)
-            }, false);
-          } else {
-            // @ts-expect-error
-            elementToBind.addEventListener('click', this[functionName].bind(this))
-          }
-  
-          elementToBind.removeAttribute('pvClick');
-        }
-      }
-    });
-  }
-
   render(container?: HTMLElement): HTMLElement {
     this.importComponentStyle();
     const fragment = new PVParahybaCompiler(
-      this.component.templateParams, this.componentTemplate, this.component?.components
+      this.component.templateParams, this.componentTemplate, this.component?.components, this.component?._self
     ).compiledElement;
 
-    this.bindListeners(fragment);
     this.compileRefs(fragment);
     this.component.elementRef = <HTMLElement>fragment;
 

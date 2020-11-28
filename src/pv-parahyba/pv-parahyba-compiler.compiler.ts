@@ -3,15 +3,17 @@ import { getValueFromScope } from '~/pv-parahyba/utils/index';
 
 export default class PVParahybaCompiler {
   template: string = '';
-  scope: Object;
+  scope: object;
   components: object;
   compiledElement: HTMLElement;
   compiledComponents: Array<any> = [];
+  _self: any;
 
-  constructor(scope: Object, template: string = '', components: object = {}) {
+  constructor(scope: Object, template: string = '', components: object = {}, _self?: any) {
     this.template = template;
     this.scope = scope;
     this.components = components;
+    this._self = _self;
     this.compiledElement = this.compile();
   }
 
@@ -157,15 +159,47 @@ export default class PVParahybaCompiler {
     });
   }
 
+  bindListeners(element: HTMLElement) {
+    const clickListeners = element.querySelectorAll('[pvClick]');
+
+    clickListeners.forEach((elementToBind) => {
+      const functionAttribute = elementToBind.getAttribute('pvClick');
+      if (functionAttribute) {
+        const functionName = functionAttribute.substring(0, functionAttribute.indexOf('(') > -1 ? functionAttribute.indexOf('(') : undefined );
+
+        if (functionName) {
+          const functionArgs = functionAttribute.substring(functionAttribute.indexOf('(') + 1, functionAttribute.indexOf(')') || 0);
+
+          if (functionArgs) {
+            const functionArgsSplitted = functionArgs.split(',').map((arg) => Function(`return ${arg}`)());
+            elementToBind.addEventListener('click', function() {
+              // @ts-expect-error
+              this[functionName](...functionArgsSplitted)
+            }.bind(this._self), false);
+          } else {
+            elementToBind.addEventListener('click', this._self[functionName].bind(this._self))
+          }
+  
+          elementToBind.removeAttribute('pvClick');
+        }
+      }
+    });
+  }
+
   compile(): HTMLElement {
     const fragment = this.createElement(this.template);
     this.runDirectives(fragment);
     this.compileAttributes(fragment);
-    this.compileComponents(fragment);
+
+    if (this._self) {
+      this.bindListeners(fragment);
+    }
 
     if (this.scope) {
       this.applyParamsToTemplate(fragment);
     }
+
+    this.compileComponents(fragment);
 
     return fragment;
   }

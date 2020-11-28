@@ -23,7 +23,7 @@ export default class Index extends  PVComponent {
         // this.startups = [{data: { name: 'hey'}}, {data: { name: 'hi'}}, {data: { name: 'hix'}}, {data: { name: 'hia'}}, {data: { name: 'hi1'}}, {data: { name: 'hi2'}}, {data: { name: 'hi3'}}, {data: { name: 'hi4'}}]; // DEVELOPMENT
 
         this.templateParams = { startups: this.startups };
-        this.render();
+        this.render(container);
       });
   }
 };
