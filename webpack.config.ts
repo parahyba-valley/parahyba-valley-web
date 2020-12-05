@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   entry: './src/index.ts',
@@ -74,7 +75,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Parahyba Valley',
       template: './src/index.html',
-    })
+    }),
+    new FaviconsWebpackPlugin({
+      logo: './src/assets/short-logo-parahyba.png',
+      publicPath: '/public',
+    }),
   ],
   optimization: {
     minimizer: [new UglifyJsPlugin()],
