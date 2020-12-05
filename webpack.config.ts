@@ -78,7 +78,6 @@ module.exports = {
     }),
     new FaviconsWebpackPlugin({
       logo: './src/assets/short-logo-parahyba.png',
-      publicPath: '/public',
     }),
   ],
   optimization: {
