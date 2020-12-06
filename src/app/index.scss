@@ -7,7 +7,6 @@ body {
   left: 0;
   top: 0;
   font-size: 100%;
-  background: url(assets/bg-pattern.png);
 }
 
 .parahyba-valley {
@@ -42,51 +41,6 @@ time, mark, audio, video {
   margin: 0;
   padding: 0;
   vertical-align: baseline;
-}
-
-
-// typography
-
-h1 {
-  font-size: 2.5rem;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.375rem;
-}
-
-h4 {
-  font-size: 1.125rem;
-}
-
-h5 {
-  font-size: 1rem;
-}
-
-h6 {
-  font-size: 0.875rem;
-}
-
-p {
-  font-size: 1.125rem;
-  font-weight: 200;
-  line-height: 1.8;
-}
-
-.font-light {
-  font-weight: $font-weight-light;
-}
-
-.font-regular {
-  font-weight: $font-weight-regular;
-}
-
-.font-heavy {
-  font-weight: $font-weight-heavy;
 }
 
 // utility
@@ -197,5 +151,20 @@ $breakpoint-large: 60em; // 960px
 
   .hidden-sm {
     display: block;
+  }
+}
+
+.section {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: $space-l;
+  padding-bottom: $space-l;
+
+  &:first-child {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }

@@ -1,14 +1,38 @@
-<div class="slider">
+<div class="slider section">
+  <div class="container">
+    <div class="row">
+      <div class="slider__slides" ref="slides">
+        <div class="slider__slides__item" pvFor="slide in slides">
+          <div class="row">
+            <div class="col-6 col-6-sm">
+              <img
+                class="startup-logo"
+                src="{{ slide.data.profile_image }}"
+                alt="Logo da empresa"
+                pvIf="slide.data.profile_image"
+              >
+            </div>
+            <div class="col-6 col-6-sm">
+              <div class="row">
+                <div class="col-12 col-12-sm">
+                  {{ slide.data.name }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-12-sm">
+                  {{ slide.data.description }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="slider__control slider__control--left" pvClick="previous"></div>
 
   <div class="slider__control slider__control--right" pvClick="next"></div>
-
-  <div class="slider__slides" ref="slides">
-    <div class="slider__slides__item" pvFor="slide in slides">
-      <span pvIf="slide.data" >{{ slide.data.name }}</span>
-      <span pvIf="slide.data.teste" >don't show me</span>
-    </div>
-  </div>
 
   <div class="slider__control-indicators">
     <div class="slider__control-indicators__wrapper">

@@ -72,7 +72,7 @@
 
 // Colors
 .title--strong {
-  color: $dark-gray;
+  color: $cyan800;
 }
 
 .title--interactive {
@@ -81,4 +81,10 @@
 
 .title--inverted {
   color: white;
+}
+
+// Space
+
+.title--large-space {
+  margin-bottom: $space-st;
 }
