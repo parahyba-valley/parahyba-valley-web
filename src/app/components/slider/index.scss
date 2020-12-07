@@ -55,9 +55,10 @@
 }
 
 .slider__slides__item {
-  height: 100%;
-  width: 100%;
   display: inline-block;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
 }
 
 .slider__control-indicators {
