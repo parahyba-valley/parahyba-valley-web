@@ -8,6 +8,7 @@ export default abstract class PVComponent {
   constructor(component: IPVComponent) {
     this.component = component;
     this.state = {};
+    this.originClass = this;
   }
 
   get componentTemplate() {
@@ -18,8 +19,8 @@ export default abstract class PVComponent {
     return require(`~/app/index.html`);
   }
 
-  set _self(_self: any) {
-    this.component._self = _self;
+  set originClass(originClass: any) {
+    this.component.originClass = originClass;
   }
 
   importComponentStyle() {
@@ -51,7 +52,7 @@ export default abstract class PVComponent {
   render(container?: HTMLElement): HTMLElement {
     this.importComponentStyle();
     const fragment = new PVParahybaCompiler(
-      this.state, this.componentTemplate, this.component?.components, this.component?._self
+      this.state, this.componentTemplate, this.component?.components, this.component?.originClass
     ).compiledElement;
 
     this.compileRefs(fragment);

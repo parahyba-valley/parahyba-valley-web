@@ -3,30 +3,18 @@ import { getvalueFromState } from '~/pv-parahyba/utils/index';
 
 export default class PVParahybaCompiler {
   template: string = '';
-  state: object;
-  components: object;
+  state: { [key: string]: any };
+  components:  { [key: string]: any };
   compiledElement: HTMLElement;
   compiledComponents: Array<any> = [];
-  _self: any;
+  originClass: any;
 
-  constructor(state: Object, template: string = '', components: object = {}, _self?: any) {
+  constructor(state: Object, template: string = '', components: object = {}, originClass?: any) {
     this.template = template;
     this.state = state;
     this.components = components;
-    this._self = _self;
+    this.originClass = originClass;
     this.compiledElement = this.compile();
-  }
-
-  populateTemplate(path: any, object: any, template: any, key: any) {
-    if (!(typeof object === 'object' && object !== null)) {
-      return template.replace(new RegExp(`{{ ${path} }}`, 'g'), object);
-    }
-    Object.keys(object).forEach((key) => {
-      const new_path = path === "" ? path + `${key}` : path + `.${key}`
-      template = this.populateTemplate(new_path, object[key], template, key);
-    });
-
-    return template;
   }
 
   getvalueFromState(path: string): any {
@@ -35,7 +23,6 @@ export default class PVParahybaCompiler {
     const splittedPath = path.split('.');
 
     for(let i = 0; i < splittedPath.length; i++) {
-      // @ts-expect-error
       currentState = currentState[splittedPath[i]];
 
       if (currentState) {
@@ -49,89 +36,62 @@ export default class PVParahybaCompiler {
     return finalValue;
   }
 
-  templatedReplacedWithStateParams(text: string): string {
+  transpileParamToState(text: string | null): string {
     if (!text) return '';
-    
+
     let textToReplace = text;
     const path = textToReplace.match(new RegExp('{{ (.*) }}'));
 
     if (path && path[1]) {
       const value = getvalueFromState(path[1], this.state);
       textToReplace = textToReplace.replace(new RegExp(path[0], 'g'), value);
-      textToReplace = this.templatedReplacedWithStateParams(textToReplace);
+      textToReplace = this.transpileParamToState(textToReplace);
     }
 
     return textToReplace;
   }
 
+  elementHasDirective(element: HTMLElement): Boolean {
+    let hasDirectiveAttribute = false;
+
+    Array.from(element.attributes).forEach(attribute => {
+      if (directives[attribute.localName]) {
+        hasDirectiveAttribute = true;
+      }
+    });
+
+    return hasDirectiveAttribute;
+  }
+
   compileAttributes(element: HTMLElement) {
-    const AttributesToCompile = ['pvClick'];
+    Array.from(element.attributes).forEach(attribute => {
+      const attributeName = attribute.name;
+      const attributeValue = attribute.value;
 
-    AttributesToCompile.forEach((attribute) => {
-      if (element.hasAttribute(attribute)) {
-        const attributeValue =  element.getAttribute(attribute);
+      if (attributeName.indexOf(':') > -1)  {
+        const value = getvalueFromState(attributeValue, this.state);
 
-        // is a function
-        if (attributeValue && attributeValue.indexOf('(') > -1 && attributeValue.indexOf(')') > -1) {
-          let params = attributeValue.substring(attributeValue.indexOf('(') + 1, attributeValue.indexOf(')'));
-          let paramsSplitted: Array<any> = params.split(',');
-
-          paramsSplitted.forEach((param, index) => {
-            const clearedParam = param.trim();
-            const valueFromState = getvalueFromState(clearedParam, this.state);
-            paramsSplitted[index] = valueFromState !== undefined ? valueFromState : clearedParam;
-          });
-
-          element.setAttribute(
-            attribute, `${attributeValue.slice(0, attributeValue.indexOf('('))}(${paramsSplitted.join(', ')})`
-          );
-        }
+        element.removeAttribute(attributeName);
+        element.setAttribute(attributeName.replace(':', ''), value);
       }
     });
   }
 
-  compileComponents(element: HTMLElement) {
-    Object.keys(this.components).forEach((component) => {
-      element.querySelectorAll(component).forEach((componentElement) => {
-        const attributes = componentElement.getAttributeNames();
-        let stateToProperties: object = {};
+  compileComponent(componentElement: HTMLElement, componentName: string) {
+    const attributes = componentElement.getAttributeNames();
+    let stateToProperties: object = {};
 
-        attributes.forEach((attribute) => {
-          const attributeValue = componentElement.getAttribute(attribute);
-          
-          if (attributeValue) {
-            // @ts-expect-error
-            stateToProperties[attribute] = getvalueFromState(attributeValue, this.state);
-          }
-        });
-
-        // @ts-expect-error
-        const compiledComponent = new this.components[component](stateToProperties).render();
-        componentElement.parentElement?.replaceChild(compiledComponent, componentElement);
-      });
-    });
-  }
-
-  applyParamsToTemplate(element: HTMLElement) {
-    const childrens = element.children;
-    for (let i = 0; i < childrens.length; i ++ ) {
-      const element = childrens[i] as HTMLElement;
-      this.compileAttributes(element);
+    attributes.forEach((attribute) => {
+      const attributeValue = componentElement.getAttribute(attribute);
       
-      element.childNodes.forEach((node) => {
-        if (node.nodeType !== 3 && (node as HTMLElement).hasAttribute('pvFor')) {
-          return;
-        }
-        if (node.nodeType === 3) {
-          const elementText = node.nodeValue;
-          if (elementText) {
-            node.nodeValue = this.templatedReplacedWithStateParams(elementText);
-          }
-        } else {
-          this.applyParamsToTemplate(node as HTMLElement);
-        }
-      });
-    }
+      if (attributeValue) {
+        // @ts-expect-error
+        stateToProperties[attribute] = getvalueFromState(attributeValue, this.state);
+      }
+    });
+
+    const compiledComponent = new this.components[componentName](stateToProperties).component.elementRef;
+    componentElement.parentElement?.replaceChild(compiledComponent, componentElement);
   }
 
   createElement(template: string): HTMLElement {
@@ -140,66 +100,51 @@ export default class PVParahybaCompiler {
     return templateElement.content.children[0] as HTMLElement;
   }
 
-  applyDirectiveToElement(element: HTMLElement, directiveName: string, directive: typeof directives): any {
-    const directiveElement = element.querySelector(`[${directiveName}]`);
-
-    if (directiveElement) {
-      const value = directiveElement.getAttribute(directiveName);
-      directiveElement.removeAttribute(directiveName);
-      const directiveClass = Object.create(directive);
-      directiveClass.constructor.apply(directive, new Array({ state: this.state, element: directiveElement, value }));
-      this.applyDirectiveToElement(element, directiveName, directive);
-    }
+  applyDirectiveToElement(element: HTMLElement, directiveName: string): typeof directives {
+    const value = element.getAttribute(directiveName);
+    element.removeAttribute(directiveName);
+    return new directives[directiveName]({ state: this.state, element, value, originClass: this.originClass });
   }
 
-  runDirectives(element: HTMLElement) {
-    Object.keys(directives).forEach((directiveName) => {
-      // @ts-expect-error
-      this.applyDirectiveToElement(element, directiveName, directives[directiveName].prototype);
-    });
-  }
+  compileDirectives(element: HTMLElement): boolean {
+    let selfCompile = false;
+    
+    element.getAttributeNames().forEach((attribute) => {
+      if (directives[attribute] && !selfCompile) {
+        const directive = this.applyDirectiveToElement(element, attribute);
 
-  bindListeners(element: HTMLElement) {
-    const clickListeners = element.querySelectorAll('[pvClick]');
-
-    clickListeners.forEach((elementToBind) => {
-      const functionAttribute = elementToBind.getAttribute('pvClick');
-      if (functionAttribute) {
-        const functionName = functionAttribute.substring(0, functionAttribute.indexOf('(') > -1 ? functionAttribute.indexOf('(') : undefined );
-
-        if (functionName) {
-          const functionArgs = functionAttribute.substring(functionAttribute.indexOf('(') + 1, functionAttribute.indexOf(')') || 0);
-
-          if (functionArgs) {
-            const functionArgsSplitted = functionArgs.split(',').map((arg) => Function(`return ${arg}`)());
-            elementToBind.addEventListener('click', function() {
-              // @ts-expect-error
-              this[functionName](...functionArgsSplitted)
-            }.bind(this._self), false);
-          } else {
-            elementToBind.addEventListener('click', this._self[functionName].bind(this._self))
-          }
-  
-          elementToBind.removeAttribute('pvClick');
+        if (directive.selfCompile) {
+          selfCompile = true;
         }
       }
+    });
+
+    return selfCompile;
+  }
+
+  compileElement(element: HTMLElement) {
+    if (this.components[element.localName]) {
+      this.compileComponent(element, element.localName);
+      return;
+    }
+    
+    if (this.elementHasDirective(element)) {
+      const selfCompile = this.compileDirectives(element);
+      if (selfCompile) return;
+    }
+
+    this.compileAttributes(element);
+
+    element.childNodes.forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE) this.compileElement(node as HTMLElement);
+      else if (node.nodeType === Node.TEXT_NODE) node.nodeValue = this.transpileParamToState(node.nodeValue);
     });
   }
 
   compile(): HTMLElement {
     const fragment = this.createElement(this.template);
-    this.runDirectives(fragment);
-    this.compileAttributes(fragment);
 
-    if (this._self) {
-      this.bindListeners(fragment);
-    }
-
-    if (this.state) {
-      this.applyParamsToTemplate(fragment);
-    }
-
-    this.compileComponents(fragment);
+    this.compileElement(fragment);
 
     return fragment;
   }

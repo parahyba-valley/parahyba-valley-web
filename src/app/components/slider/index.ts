@@ -8,7 +8,7 @@ export default class Slider extends PVComponent {
 
   constructor(properties: any) {
     super({ componentPath: 'components/slider' });
-    this._self = this;
+
     this.state = {
       slides: properties.startups,
     };
@@ -26,7 +26,6 @@ export default class Slider extends PVComponent {
       }
     });
   }
-  
   previous() {
     this.moveSlides(-1);
   }

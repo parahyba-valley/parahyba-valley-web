@@ -5,11 +5,15 @@ export default class PVFor {
   state: any;
   element: any;
   value: any | undefined;
+  selfCompile: boolean = true;
+  originClass: any;
 
   constructor(directive: IPVDirective) {
     this.state = directive.state;
     this.element = directive.element;
     this.value = directive.value;
+    this.originClass = directive.originClass;
+
     this.init();
   }
 
@@ -22,7 +26,7 @@ export default class PVFor {
     const elementHtml = this.element.outerHTML;
 
     data.forEach((item: Object, index: Number) => {
-      const compiledElement = new PVParahybaCompiler({ ...this.state, [dataBasePath]: item, index }, elementHtml).compiledElement;
+      const compiledElement = new PVParahybaCompiler({ ...this.state, [dataBasePath]: item, index }, elementHtml, undefined, this.originClass).compiledElement;
       parent.appendChild(compiledElement);
     });
 

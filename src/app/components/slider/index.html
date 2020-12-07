@@ -5,8 +5,13 @@
 
   <div class="slider__slides" ref="slides">
     <div class="slider__slides__item" pvFor="slide in slides">
-      <span pvIf="slide.data" >{{ slide.data.name }}</span>
-      <span pvIf="slide.data.teste" >don't show me</span>
+      <img style="width: 100%;" pvIf="slide.data.profile_image" :src="slide.data.profile_image">
+      <div>
+        <span pvFor="slide in slides">
+          {{ slide.data.name }}
+        </span>
+      </div>
+      <p pvIf="slide.data.teste" >don't show me</p>
     </div>
   </div>
 
@@ -15,8 +20,8 @@
       <div class="slider__control-indicators__itens" ref="indicators">
         <div
           class="slider__control-indicators__item"
-          pvClick="changeActiveSlide(index, 'teste')"
           pvFor="slide in slides"
+          pvClick="changeActiveSlide(index, 'teste')"
         >
         </div>
       </div>
