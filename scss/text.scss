@@ -58,3 +58,11 @@
 .text--inverted {
   color: white;
 }
+
+.text--light {
+  color: $light-gray;
+}
+
+.text--large-space {
+  margin-bottom: $space-st;
+}

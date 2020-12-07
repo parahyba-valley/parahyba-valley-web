@@ -168,3 +168,8 @@ $breakpoint-large: 60em; // 960px
     padding-bottom: 0;
   }
 }
+
+.section--short {
+  padding-top: $space-s;
+  padding-bottom: $space-s;
+}
