@@ -1,0 +1,13 @@
+@import 'scss/variables.scss';
+@import 'scss/title.scss';
+@import 'scss/text.scss';
+
+.cities {
+  background-color: $blue000;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

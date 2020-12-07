@@ -1,7 +1,7 @@
 @import 'scss/variables.scss';
 
 .text {
-  color: $dark-gray;
+  color: $cyan800;
   font-family: $font-family;
   font-size: rem(16);
   font-weight: $font-weight-normal;
@@ -47,7 +47,7 @@
 
 // Colors
 .text--strong {
-  color: $dark-gray;
+  color: $cyan800;
 }
 
 .text--interactive {
@@ -57,4 +57,12 @@
 
 .text--inverted {
   color: white;
+}
+
+.text--light {
+  color: $light-gray;
+}
+
+.text--large-space {
+  margin-bottom: $space-st;
 }

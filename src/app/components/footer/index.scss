@@ -1,0 +1,25 @@
+@import 'scss/variables.scss';
+@import 'scss/title.scss';
+@import 'scss/text.scss';
+
+.footer {
+  background-color: $cyan800;
+}
+
+.footer-logo {
+  height: 100px;
+  margin-bottom: 16px;
+}
+
+.collab-avatar {
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+}
+
+.footer-divider {
+  height:1px;
+  background-color:white;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
