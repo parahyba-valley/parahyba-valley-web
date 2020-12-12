@@ -1,19 +1,16 @@
 @import 'scss/variables.scss';
 
 .startup-logo{
-  width: 100%;
-  height: auto;
+  height: 140px;
+
+  @media (min-width: $screen-desktop) {
+    height: 240px;
+  }
 }
 
 .slider {
-  height: calc(100% - 78px);
   overflow: hidden;
-  position: relative;
   width: 100%;
-
-  @media (max-width: $screen-phone) {
-    height: calc(100% - 67px);
-  }
 }
 
 .slider__control {
@@ -45,28 +42,16 @@
 }
 
 .slider__slides {
-  height: 100%;
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
   white-space: nowrap;
   transition: left 800ms ease;
 }
 
 .slider__slides__item {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
   display: inline-block;
-  height: 100%;
-  overflow: hidden;
   width: 100%;
-}
-
-.slider__control-indicators {
-  position: absolute;
-  bottom: $space-m;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
 }
 
 .slider__control-indicators__wrapper {

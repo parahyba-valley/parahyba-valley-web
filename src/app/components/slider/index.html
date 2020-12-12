@@ -1,16 +1,16 @@
 <div class="slider section">
-  <div class="slider__slides" ref="slides">
-    <div class="slider__slides__item" pvFor="slide in slides">
-      <div class="row">
-        <div class="col-6 col-6-sm">
+  <div class="container">
+    <div class="slider__slides row" ref="slides">
+      <div class="slider__slides__item" pvFor="slide in slides">
+        <div class="col-6 col-12-sm center">
           <img
             class="startup-logo"
             alt="Logo da empresa"
-            pvIf="slide.data.profile_image" 
+            pvIf="slide.data.profile_image"
             :src="slide.data.profile_image"
           >
         </div>
-        <div class="col-6 col-6-sm">
+        <div class="col-6 col-12-sm">
           <div class="row">
             <div class="col-12 col-12-sm">
               {{ slide.data.name }}
@@ -24,20 +24,20 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="slider__control slider__control--left" pvClick="previous"></div>
+    <div class="slider__control slider__control--left" pvClick="previous"></div>
 
-  <div class="slider__control slider__control--right" pvClick="next"></div>
+    <div class="slider__control slider__control--right" pvClick="next"></div>
 
-  <div class="slider__control-indicators">
-    <div class="slider__control-indicators__wrapper">
-      <div class="slider__control-indicators__itens" ref="indicators">
-        <div
-          class="slider__control-indicators__item"
-          pvFor="slide in slides"
-          pvClick="changeActiveSlide(index, 'teste')"
-        >
+    <div class="row">
+      <div class="slider__control-indicators__wrapper col-12 center">
+        <div class="slider__control-indicators__itens" ref="indicators">
+          <div
+            class="slider__control-indicators__item"
+            pvFor="slide in slides"
+            pvClick="changeActiveSlide(index, 'teste')"
+          >
+          </div>
         </div>
       </div>
     </div>
