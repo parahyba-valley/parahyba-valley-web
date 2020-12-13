@@ -121,7 +121,7 @@ export default class Slider extends PVComponent {
   createSliderInterval() {
     this.sliderIntervalController = setTimeout(() => {
       this.next();
-    }, 10000000);
+    }, 8000);
   }
 
   changeActiveSlide(indicatorIndex: number) {
