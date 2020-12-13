@@ -10,14 +10,14 @@
             :src="slide.data.profile_image"
           >
         </div>
-        <div class="col-6 col-12-sm">
+        <div class="col-6 col-12-sm teste">
           <div class="row">
             <div class="col-12 col-12-sm">
               {{ slide.data.name }}
             </div>
           </div>
           <div class="row">
-            <div class="col-12 col-12-sm">
+            <div class="col-12 col-12-sm teste">
               {{ slide.data.description }}
             </div>
           </div>
@@ -25,20 +25,26 @@
       </div>
     </div>
 
-    <div class="slider__control slider__control--left" pvClick="previous"></div>
+    <div class="row slider__bottom-wrapper">
+      <div class="col-1 col-1-sm">
+        <div class="slider__control slider__control--left" pvClick="previous"></div>
+      </div>
 
-    <div class="slider__control slider__control--right" pvClick="next"></div>
-
-    <div class="row">
-      <div class="slider__control-indicators__wrapper col-12 center">
-        <div class="slider__control-indicators__itens" ref="indicators">
-          <div
-            class="slider__control-indicators__item"
-            pvFor="slide in slides"
-            pvClick="changeActiveSlide(index, 'teste')"
-          >
+      <div class="col-10 col-10-sm">
+        <div class="slider__control-indicators__wrapper center">
+          <div class="slider__control-indicators__itens" ref="indicators">
+            <div
+              class="slider__control-indicators__item"
+              pvFor="slide in slides"
+              pvClick="changeActiveSlide(index, 'teste')"
+            >
+            </div>
           </div>
         </div>
+      </div>
+
+      <div class="col-1 col-1-sm">
+        <div class="slider__control slider__control--right" pvClick="next"></div>
       </div>
     </div>
   </div>
