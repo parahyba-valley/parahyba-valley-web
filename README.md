@@ -1,5 +1,5 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/fd20f916-72b2-493c-8417-e14fe3ceff0f/deploy-status)](https://app.netlify.com/sites/kind-euclid-dcefd3/deploys)
-
+[Logo](https://parahybavalley.org/9ab7979ccf0ea8912cdc10d1f927085f.png)
 # parahyba-valley-web
 
 # parahyba-valley framework
