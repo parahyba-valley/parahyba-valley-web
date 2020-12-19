@@ -16,21 +16,31 @@ O Parahyba Valley é um projeto para ajudar a divulgar as empresas e projetos do
 ## Com docker
 
 Suba o container da aplicação:
-`docker-compose up -d app`
+```shell
+docker-compose up -d app
+```
 
 Instale as dependências:
-`docker-compose exec app yarn`
+```shell
+docker-compose exec app yarn
+```
 
 Inicie a aplicação:
-`docker-compose exec app npm run start`
+```shell
+docker-compose exec app npm run start
+```
 
 ## Sem docker
 
 Instale as dependências:
-`yarn install`
+```shell
+yarn install
+```
 
 Execute a aplicação:
-`npm run start`
+```shell
+npm run start
+```
 
 Com isso temos o front rodando em `http://localhost:9001/` e o back em `http://localhost:9000/`.
 
@@ -38,32 +48,55 @@ Com isso temos o front rodando em `http://localhost:9001/` e o back em `http://l
 O pv-parahyba framework é responsável por compilar o projeto, rodar o motor de diretrizes e controlar os estados dos seus componentes.
 
 ## Criando um component
-Para criar um component, faça crie uma classe para seu componente e faça o extends da classe PVComponent (`import PVComponent from "~/pv-parahyba/extends/pv-component";`).
+Para criar um component, faça crie uma classe para seu componente e faça o extends da classe PVComponent.
+```typescript
+import PVComponent from "~/pv-parahyba/extends/pv-component";
+```
 
 ### Gerenciando os estados do componente
-Os PVComponents trabalham com states, dessa forma, ele sabe exatamente o momento de recompilar, sem precisar ficar escutando por alguma mudança em uma variável.
-Para criar um state, basta atribuir um atributo para o objeto state, da seguinte forma
-```
+Os **PVComponents** trabalham com _states_, sabendo exatamente o momento de recompilar sem precisar ficar escutando por alguma mudança em uma variável.
+Para criar um state basta atribuir um atributo para o objeto _state_:
+```typescript
 this.state = { var1: 'teste' }
 ```
 
 ### Renderizando o componente
-Dentro do constructor do seu componente, será necessário chamar um `super()` referente ao extends do PVComponent, no super, você precisa passar um objeto contendo o atributo `templatePath`, onde indica o caminho dos arquivos do seu componente. É preciso colocar o caminho a partir da pasta `/app/`.
-ex: `super({ componentPath: 'components/slider' })`
+Dentro do _constructor_ do seu componente será necessário chamar um `super()` referente ao _extends_ do **PVComponent**. No `super` você precisa passar um objeto contendo o atributo `templatePath` indicando o caminho dos arquivos do seu componente. É preciso colocar o caminho a partir da pasta `/app/`:
+```typescript
+super({ componentPath: 'components/slider' })
+```
 
 ### Passando atributos para um componente
-Para atribuir um atributo para um componente, basta colocar uma propriedade na tag do elemento, sendo a propriedade o nome da property chamada dentro do elemento no qual você está representando pela tag, e o valor da propriedade é o caminho do valor dentro do seu state.
-ex: `<slider startups="startups"></slider>`
+Para atribuir um atributo para um componente basta colocar uma propriedade na _tag_ do elemento. Sendo a propriedade o nome da _property_ chamada dentro do elemento no qual você está representando pela _tag_ e o valor da propriedade é o caminho do valor dentro do seu _state_.
+```html
+<slider startups="startups"></slider>
+```
 
 ### Click listeners
-para atribuir um listener de click em um elemento, basta colocar PVClick na tag do elemento, passando o nome da função e seus possiveis parâmetros.
-Caso coloque apenas o nome da função, ex: `<button PVClick="teste"></button>`, ao clicar no botão, a função teste será chamada passando  o evento nativo do JS, caso você coloque parâmetros, ex: `<button PVClick="teste(1, index)"></button>`, a função teste será chamada passando 1 como argumento e será esperado que a variável index exista dentro do escopo do componente, pois o valor do mesmo será passado.
+Para atribuir um listener de click em um elemento basta colocar **PVClick** na _tag_ do elemento, passando o nome da função e seus possiveis parâmetros.
+
+Caso coloque apenas o nome da função: 
+```html
+<button PVClick="teste"></button>
+```
+Ao clicar no botão, a função teste será chamada passando  o evento nativo do JS.
+
+Caso você coloque também os parâmetros: 
+```html
+<button PVClick="teste(1, index)"></button>
+```
+A função teste será chamada passando 1 como argumento e será esperado que a variável _index_ exista dentro do escopo do componente, pois o valor do mesmo será passado.
 
 ### PVFor
-Para realizar a repetição de um elemento, basta adicionar o atributo PVFor ao elemento, passando como valor, o nome da chave no escopo na qual será acessada no template e o array dentro do state na qual iremos repetir.
-ex: `<div class="slider__slides__item" pvFor="slide in slides">`
+Para realizar a repetição de um elemento basta adicionar o atributo **PVFor** ao elemento, passando como valor o nome da chave no escopo na qual será acessada no template e o array dentro do state:
+```html
+<div class="slider__slides__item" pvFor="slide in slides">
+```
 
-### pvIf
-Para exibir ou não um elemento, basta adicionar a tag PVIf ao elemento, passando como valor o caminho no qual corresponde a condição.
-Para negar uma condição, adicione ! na frente do parâmetro.
-ex: `<span pvIf="slide.data.teste" >don't show me</span>`
+### PVIf
+Para exibir ou não um elemento basta adicionar a tag **PVIf** ao elemento, passando como valor o caminho no qual corresponde a condição.
+Para negar uma condição, adicione `!` na frente do parâmetro:
+```html
+<span pvIf="slide.data.teste" >show me if slide.data.teste exists</span>
+<span pvIf="!slide.data.teste" >show me if slide.data.teste is blank</span>
+```
