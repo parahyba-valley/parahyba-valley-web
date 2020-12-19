@@ -5,12 +5,6 @@
 # Introdução
 O Parahyba Valley é um projeto para ajudar a divulgar as empresas e projetos do Vale do Paraíba.
 
-|Tecnologias usadas|
-|-|
-|Typescript|
-|Netlify|
-|FaunaDB|
-
 # Setup
 
 ## Com docker
