@@ -1,4 +1,5 @@
 import PVComponent from "~/pv-parahyba/extends/pv-component";
+import StartupsService from '~/app/services/startups-service';
 
 export default class Slider extends PVComponent {
   currentSlideIndex: number = 0;
@@ -6,15 +7,10 @@ export default class Slider extends PVComponent {
   indicators!: HTMLElement;
   sliderIntervalController: any;
 
-  constructor(properties: any) {
+  constructor() {
     super({ componentPath: 'components/slider' });
-
-    this.state = {
-      slides: properties.startups,
-    };
-
+    this.state = { loading: true, slides: [] };
     this.render();
-    this.initSlider();
 
     addEventListener("visibilitychange", () => {
       if (document.hidden) {
@@ -26,6 +22,16 @@ export default class Slider extends PVComponent {
       }
     });
   }
+
+  onMounted() {
+    StartupsService
+    .getAll()
+    .then((response) => {
+      const startups = response.sort(() => .5 - Math.random());
+      this.setState({ loading: false, slides: startups });
+    });
+  }
+
   previous() {
     this.moveSlides(-1);
   }

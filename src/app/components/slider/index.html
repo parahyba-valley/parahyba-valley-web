@@ -1,6 +1,13 @@
 <div class="slider section">
   <div class="container">
     <div class="slider__slides row" ref="slides">
+      <div pvIf="loading" class="slider__loading">
+        <img
+          src="../../../assets/short-logo-parahyba.png"
+          alt="Parahyba Valley logo"
+          class="slider__loading-img"
+        />
+      </div>
       <div class="slider__slides__item" pvFor="slide in slides">
         <div class="col-6 col-12-sm center">
           <img
@@ -11,7 +18,7 @@
           >
           <img
             src="../../../assets/logo-parahyba.png"
-            pvIfNot="slide.data.profile_image"
+            pvIf="!slide.data.profile_image"
             alt="Parahyba Valley logo"
             class="startup-logo"
           >
@@ -29,7 +36,7 @@
           </div>
           <div class="row">
             <div class="col-12 col-12-sm">
-              <p pvIfNot="slide.data.description" class="text slider-item__description">Sem descrição</p>
+              <p pvIf="!slide.data.description" class="text slider-item__description">Sem descrição</p>
             </div>
           </div>
           <div class="row">

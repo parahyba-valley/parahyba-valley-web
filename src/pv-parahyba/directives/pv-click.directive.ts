@@ -5,27 +5,27 @@ export default class PVClick {
   state: any;
   element: any;
   value: any | undefined;
-  originClass: any;
+  scope: any;
 
   constructor(directive: IPVDirective) {
     this.state = directive.state;
     this.element = directive.element;
     this.value = directive.value;
-    this.originClass = directive.originClass;
+    this.scope = directive.scope;
 
     this.init();
   }
 
   extractFunctionName(functionAttribute: string): string {
     return functionAttribute.substring(
-      0, 
-      functionAttribute.indexOf('(') > -1 ? functionAttribute.indexOf('(') : undefined 
+      0,
+      functionAttribute.indexOf('(') > -1 ? functionAttribute.indexOf('(') : undefined
     );
   }
 
   extractFunctionArgs(functionAttribute: string): Array<string> | null {
     const functionArgs = functionAttribute.substring(
-      functionAttribute.indexOf('(') + 1, 
+      functionAttribute.indexOf('(') + 1,
       functionAttribute.indexOf(')') || 0
     );
 
@@ -53,11 +53,13 @@ export default class PVClick {
       this.element.addEventListener('click', function() {
         // @ts-expect-error
         this[functionName](...evaluatedFunctionArgs)
-      }.bind(this.originClass), false);
+      }.bind(this.scope), false);
     } else {
-      this.element.addEventListener('click', this.originClass[functionName].bind(this.originClass))
+      this.element.addEventListener('click', this.scope[functionName].bind(this.scope))
     }
 
     this.element.removeAttribute('pvClick');
   }
+
+  update(newState: { [key: string]: any }, scope: any) {}
 }

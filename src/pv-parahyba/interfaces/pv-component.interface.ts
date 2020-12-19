@@ -2,6 +2,6 @@ export default interface IPVComponent {
   state?: any;
   componentPath?: string;
   components?: object;
-  originClass?: any;
+  scope?: any;
   elementRef?: HTMLElement;
 }

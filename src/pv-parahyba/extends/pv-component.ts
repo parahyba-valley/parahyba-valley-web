@@ -1,14 +1,14 @@
 import IPVComponent from '~/pv-parahyba/interfaces/pv-component.interface';
 import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
+import IPVObject from '../interfaces/pv-object.interface';
 
 export default abstract class PVComponent {
   public component: IPVComponent;
-  public state: any;
+  public compiledClass!: PVParahybaCompiler;
+  public _state: { [key: string]: any } = {};
 
   constructor(component: IPVComponent) {
     this.component = component;
-    this.state = {};
-    this.originClass = this;
   }
 
   get componentTemplate() {
@@ -19,8 +19,24 @@ export default abstract class PVComponent {
     return require(`~/app/index.html`);
   }
 
-  set originClass(originClass: any) {
-    this.component.originClass = originClass;
+  set state(state: any) {
+    this._state = state;
+
+    if (this.compiledClass) {
+      this.compiledClass.updateCompiledElement(this.state, this);
+    }
+  }
+
+  get state() {
+    return this._state;
+  }
+
+  setState(obj: IPVObject) {
+    this._state = { ...this.state, ...obj };
+
+    if (this.compiledClass) {
+      this.compiledClass.updateCompiledElement(this.state, this);
+    }
   }
 
   importComponentStyle() {
@@ -49,11 +65,14 @@ export default abstract class PVComponent {
     });
   }
 
+  onMounted() {}
+
   render(container?: HTMLElement): HTMLElement {
     this.importComponentStyle();
-    const fragment = new PVParahybaCompiler(
-      this.state, this.componentTemplate, this.component?.components, this.component?.originClass
-    ).compiledElement;
+    this.compiledClass = new PVParahybaCompiler(
+      this.state, this.componentTemplate, this.component?.components, this
+    );
+    const fragment = this.compiledClass.compiledElement;
 
     this.compileRefs(fragment);
     this.component.elementRef = <HTMLElement>fragment;
@@ -61,6 +80,10 @@ export default abstract class PVComponent {
     if (container) {
       container.appendChild(this.component.elementRef);
     }
+
+    setTimeout(() => {
+      this.onMounted();
+    });
 
     return this.component.elementRef;
   }

@@ -1,5 +1,6 @@
 import directives from '~/pv-parahyba/directives';
 import { getvalueFromState } from '~/pv-parahyba/utils/index';
+import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
 
 export default class PVParahybaCompiler {
   template: string = '';
@@ -7,13 +8,14 @@ export default class PVParahybaCompiler {
   components:  { [key: string]: any };
   compiledElement: HTMLElement;
   compiledComponents: Array<any> = [];
-  originClass: any;
+  scope: any;
+  directives: Array<IPVObject> = [];
 
-  constructor(state: Object, template: string = '', components: object = {}, originClass?: any) {
+  constructor(state: Object, template: string = '', components: object = {}, scope?: any) {
     this.template = template;
     this.state = state;
     this.components = components;
-    this.originClass = originClass;
+    this.scope = scope;
     this.compiledElement = this.compile();
   }
 
@@ -51,7 +53,7 @@ export default class PVParahybaCompiler {
     return textToReplace;
   }
 
-  elementHasDirective(element: HTMLElement): Boolean {
+  elementHasDirective(element: HTMLElement): boolean {
     let hasDirectiveAttribute = false;
 
     Array.from(element.attributes).forEach(attribute => {
@@ -83,7 +85,7 @@ export default class PVParahybaCompiler {
 
     attributes.forEach((attribute) => {
       const attributeValue = componentElement.getAttribute(attribute);
-      
+
       if (attributeValue) {
         // @ts-expect-error
         stateToProperties[attribute] = getvalueFromState(attributeValue, this.state);
@@ -103,15 +105,16 @@ export default class PVParahybaCompiler {
   applyDirectiveToElement(element: HTMLElement, directiveName: string): typeof directives {
     const value = element.getAttribute(directiveName);
     element.removeAttribute(directiveName);
-    return new directives[directiveName]({ state: this.state, element, value, originClass: this.originClass });
+    return new directives[directiveName]({ state: this.state, element, value, scope: this.scope });
   }
 
   compileDirectives(element: HTMLElement): boolean {
     let selfCompile = false;
-    
+
     element.getAttributeNames().forEach((attribute) => {
       if (directives[attribute] && !selfCompile) {
         const directive = this.applyDirectiveToElement(element, attribute);
+        this.directives.push(directive);
 
         if (directive.selfCompile) {
           selfCompile = true;
@@ -127,7 +130,7 @@ export default class PVParahybaCompiler {
       this.compileComponent(element, element.localName);
       return;
     }
-    
+
     if (this.elementHasDirective(element)) {
       const selfCompile = this.compileDirectives(element);
       if (selfCompile) return;
@@ -147,5 +150,18 @@ export default class PVParahybaCompiler {
     this.compileElement(fragment);
 
     return fragment;
+  }
+
+  updateDirectives() {
+    this.directives.forEach((directive) => {
+      directive.update(this.state);
+    });
+  }
+
+  updateCompiledElement(state: any, scope: any) {
+    this.state = state;
+    this.scope = scope;
+
+    this.updateDirectives();
   }
 }

@@ -33,8 +33,5 @@ ex: `<div class="slider__slides__item" pvFor="slide in slides">`
 
 ### pvIf
 Para exibir ou não um elemento, basta adicionar a tag PVIf ao elemento, passando como valor o caminho no qual corresponde a condição.
+Para negar uma condição, adicione ! na frente do parâmetro.
 ex: `<span pvIf="slide.data.teste" >don't show me</span>`
-
-### pvIfNot
-Inverso do pvIf, basta adicionar a tag PVIfNot ao elemento, passando como valor o caminho no qual corresponde a condição.
-ex: `<span pvIfNot="slide.data.teste" >show me if not present</span>`
