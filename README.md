@@ -1,6 +1,38 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/fd20f916-72b2-493c-8417-e14fe3ceff0f/deploy-status)](https://app.netlify.com/sites/kind-euclid-dcefd3/deploys)
-[Logo](https://parahybavalley.org/9ab7979ccf0ea8912cdc10d1f927085f.png)
-# parahyba-valley-web
+
+![Parahyba Valley logo](https://parahybavalley.org/9ab7979ccf0ea8912cdc10d1f927085f.png)
+
+# Introdução
+O Parahyba Valley é um projeto para ajudar a divulgar as empresas e projetos do Vale do Paraíba.
+
+|Tecnologias usadas|
+|-|
+|Typescript|
+|Netifly|
+|FaunaDB|
+
+# Setup
+
+## Com docker
+
+Suba o container da aplicação:
+`docker-compose up -d app`
+
+Instale as dependências:
+`docker-compose exec app yarn`
+
+Inicie a aplicação:
+`docker-compose exec app npm run start`
+
+## Sem docker
+
+Instale as dependências:
+`yarn install`
+
+Execute a aplicação:
+`npm run start`
+
+Com isso temos o front rodando em `http://localhost:9001/` e o back em `http://localhost:9000/`.
 
 # parahyba-valley framework
 O parahyba-valley framework é responsável por compilar o projeto, rodar o motor de diretrizes e controlar os estados dos seus componentes.
