@@ -34,8 +34,8 @@ Execute a aplicação:
 
 Com isso temos o front rodando em `http://localhost:9001/` e o back em `http://localhost:9000/`.
 
-# parahyba-valley framework
-O parahyba-valley framework é responsável por compilar o projeto, rodar o motor de diretrizes e controlar os estados dos seus componentes.
+# Framework pv-parahyba
+O pv-parahyba framework é responsável por compilar o projeto, rodar o motor de diretrizes e controlar os estados dos seus componentes.
 
 ## Criando um component
 Para criar um component, faça crie uma classe para seu componente e faça o extends da classe PVComponent (`import PVComponent from "~/pv-parahyba/extends/pv-component";`).
