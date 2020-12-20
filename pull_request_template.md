@@ -11,7 +11,10 @@ Link para a issue.
 # Mudanças
 Lista com mudanças importantes realizadas.
 
-# Screenshots
+# Screenshots desktop
+Screenshots ou GIFs caso envolva algum front.
+
+# Screenshots mobile
 Screenshots ou GIFs caso envolva algum front.
 
 # Membros
