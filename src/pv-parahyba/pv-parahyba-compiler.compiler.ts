@@ -4,11 +4,17 @@ import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
 
 export default class PVParahybaCompiler {
   template: string = '';
+
   state: { [key: string]: any };
-  components:  { [key: string]: any };
+
+  components: { [key: string]: any };
+
   compiledElement: HTMLElement;
+
   compiledComponents: Array<any> = [];
+
   scope: any;
+
   directives: Array<IPVObject> = [];
 
   constructor(state: Object, template: string = '', components: object = {}, scope?: any) {
@@ -24,7 +30,7 @@ export default class PVParahybaCompiler {
     let currentState = this.state;
     const splittedPath = path.split('.');
 
-    for(let i = 0; i < splittedPath.length; i++) {
+    for (let i = 0; i < splittedPath.length; i++) {
       currentState = currentState[splittedPath[i]];
 
       if (currentState) {
@@ -56,7 +62,7 @@ export default class PVParahybaCompiler {
   elementHasDirective(element: HTMLElement): boolean {
     let hasDirectiveAttribute = false;
 
-    Array.from(element.attributes).forEach(attribute => {
+    Array.from(element.attributes).forEach((attribute) => {
       if (directives[attribute.localName]) {
         hasDirectiveAttribute = true;
       }
@@ -66,11 +72,11 @@ export default class PVParahybaCompiler {
   }
 
   compileAttributes(element: HTMLElement) {
-    Array.from(element.attributes).forEach(attribute => {
+    Array.from(element.attributes).forEach((attribute) => {
       const attributeName = attribute.name;
       const attributeValue = attribute.value;
 
-      if (attributeName.indexOf(':') > -1)  {
+      if (attributeName.indexOf(':') > -1) {
         const value = getvalueFromState(attributeValue, this.state);
 
         element.removeAttribute(attributeName);
@@ -81,7 +87,7 @@ export default class PVParahybaCompiler {
 
   compileComponent(componentElement: HTMLElement, componentName: string) {
     const attributes = componentElement.getAttributeNames();
-    let stateToProperties: object = {};
+    const stateToProperties: object = {};
 
     attributes.forEach((attribute) => {
       const attributeValue = componentElement.getAttribute(attribute);
@@ -97,7 +103,7 @@ export default class PVParahybaCompiler {
   }
 
   createElement(template: string): HTMLElement {
-    let templateElement = document.createElement('template');
+    const templateElement = document.createElement('template');
     templateElement.innerHTML += template;
     return templateElement.content.children[0] as HTMLElement;
   }
@@ -105,7 +111,9 @@ export default class PVParahybaCompiler {
   applyDirectiveToElement(element: HTMLElement, directiveName: string): typeof directives {
     const value = element.getAttribute(directiveName);
     element.removeAttribute(directiveName);
-    return new directives[directiveName]({ state: this.state, element, value, scope: this.scope });
+    return new directives[directiveName]({
+      state: this.state, element, value, scope: this.scope,
+    });
   }
 
   compileDirectives(element: HTMLElement): boolean {

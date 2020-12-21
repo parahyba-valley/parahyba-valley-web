@@ -5,7 +5,7 @@ export const getvalueFromState = (path: string, state: Object): any => {
   let currentState = state;
   const splittedPath = path.split('.');
 
-  for(let i = 0; i < splittedPath.length; i++) {
+  for (let i = 0; i < splittedPath.length; i++) {
     // @ts-expect-error
     currentState = currentState[splittedPath[i]];
 
@@ -29,11 +29,11 @@ export const compareObjects = (item1: IPVObject, item2: IPVObject): boolean => {
   });
 
   return !hasDiff;
-}
+};
 
 export const isEqual = (item1: any, item2: any): boolean => {
-  const type1 = typeof(item1);
-  const type2 = typeof(item2);
+  const type1 = typeof (item1);
+  const type2 = typeof (item2);
 
   if (type1 !== type2) return false;
 
@@ -52,7 +52,7 @@ export const isEqual = (item1: any, item2: any): boolean => {
   for (let i = 0; i < item1.length; i++) {
     const value1 = item1[i];
 
-    if (typeof(value1) !== 'object' && item2.indexOf(value1) < 0) {
+    if (typeof (value1) !== 'object' && item2.indexOf(value1) < 0) {
       equals = false;
       break;
     }

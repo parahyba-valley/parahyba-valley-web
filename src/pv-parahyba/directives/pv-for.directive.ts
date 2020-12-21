@@ -5,12 +5,19 @@ import { isEqual } from '../utils';
 
 export default class PVFor {
   state: any;
+
   element: any;
+
   parentElement: HTMLElement;
+
   originalTemplate: string;
+
   value: any | undefined;
+
   selfCompile: boolean = true;
+
   scope: any;
+
   compiledElements: Array<any>;
 
   constructor(directive: IPVDirective) {
@@ -54,7 +61,7 @@ export default class PVFor {
     const elementHtml = this.originalTemplate;
 
     data.forEach((item: Object, index: Number) => {
-      const compiledElement = new PVParahybaCompiler({ ...this.state, [dataBasePath]: item, index }, elementHtml, undefined, this.scope).compiledElement;
+      const { compiledElement } = new PVParahybaCompiler({ ...this.state, [dataBasePath]: item, index }, elementHtml, undefined, this.scope);
       this.compiledElements.push(compiledElement);
       parent.appendChild(compiledElement);
     });

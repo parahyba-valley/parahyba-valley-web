@@ -4,10 +4,15 @@ import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
 
 export default class PVIf {
   state: any;
+
   element: any;
+
   value: any | undefined;
+
   parentElement: HTMLElement;
+
   stuntmanElement: Comment;
+
   intialized: boolean;
 
   constructor(directive: IPVDirective) {
@@ -47,7 +52,7 @@ export default class PVIf {
 
     if (!splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value)) {
       this.parentElement.replaceChild(this.stuntmanElement, this.element);
-    } else if (this.intialized){
+    } else if (this.intialized) {
       this.parentElement.replaceChild(this.element, this.stuntmanElement);
     }
   }

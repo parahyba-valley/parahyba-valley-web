@@ -14,10 +14,10 @@ const COMPONENTS = {
   copyright: Copyright,
 };
 
-export default class Index extends  PVComponent {
+export default class Index extends PVComponent {
   constructor(container: HTMLElement) {
     super({ components: COMPONENTS });
 
     this.render(container);
   }
-};
+}
