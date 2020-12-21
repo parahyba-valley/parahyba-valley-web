@@ -1,5 +1,5 @@
 import IPVDirective from '~/pv-parahyba/interfaces/pv-directive.interface';
-import { getvalueFromState } from '~/pv-parahyba/utils/index';
+import { getValueFromState } from '~/pv-parahyba/utils/index';
 
 export default class PVClick {
   state: any;
@@ -46,7 +46,7 @@ export default class PVClick {
         try {
           return Function(`return ${arg}`)();
         } catch(_) {
-          return getvalueFromState(arg, this.state);
+          return getValueFromState(arg, this.state);
         }
       });
 
