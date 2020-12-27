@@ -1,7 +1,7 @@
 import IPVDirective from '~/pv-parahyba/interfaces/pv-directive.interface';
 import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
 import IPVObject from '../interfaces/pv-object.interface';
-import { isEqual } from '../utils';
+import { getValueFromState, isEqual } from '~/pv-parahyba/utils/index';
 
 export default class PVFor {
   state: any;
@@ -50,7 +50,7 @@ export default class PVFor {
     const splittedValue = this.value.split(' in ');
     const dataKey = splittedValue[1];
     const dataBasePath = splittedValue[0];
-    const data = this.state[dataKey];
+    const data = getValueFromState(dataKey, this.state);
     const elementHtml = this.originalTemplate;
 
     data.forEach((item: Object, index: Number) => {

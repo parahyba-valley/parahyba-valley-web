@@ -49,9 +49,9 @@ import PVComponent from "~/pv-parahyba/extends/pv-component";
 
 ### Gerenciando os estados do componente
 Os **PVComponents** trabalham com _states_, sabendo exatamente o momento de recompilar sem precisar ficar escutando por alguma mudança em uma variável.
-Para criar um state basta atribuir um atributo para o objeto _state_:
+Para criar um state basta chamar a função _stState_ passando a chave e o valor no qual queremos alterar:
 ```typescript
-this.state = { var1: 'teste' }
+this.setState({ var1: 'teste' });
 ```
 
 ### Renderizando o componente
@@ -61,9 +61,9 @@ super({ componentPath: 'components/slider' })
 ```
 
 ### Passando atributos para um componente
-Para atribuir um atributo para um componente basta colocar uma propriedade na _tag_ do elemento. Sendo a propriedade o nome da _property_ chamada dentro do elemento no qual você está representando pela _tag_ e o valor da propriedade é o caminho do valor dentro do seu _state_.
+Para atribuir um atributo para um componente basta colocar uma propriedade na _tag_ do elemento. Para pegar um valor do state precisamos colocar `:` na frente do atributo. Sendo a propriedade o nome da _property_ chamada dentro do elemento no qual você está representando pela _tag_ e o valor da propriedade é o caminho do valor dentro do seu _state_.
 ```html
-<slider startups="startups"></slider>
+<slider :startups="startups"></slider>
 ```
 
 ### Click listeners
