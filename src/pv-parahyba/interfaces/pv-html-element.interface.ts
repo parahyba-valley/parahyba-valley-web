@@ -1,10 +1,8 @@
-import IPVObject from "./pv-object.interface";
-
 export type PVElement = {
   isPVComponent?: boolean;
   compiled?: boolean;
   pvUID?: number;
-  properties?: IPVObject;
+  properties?: Array<string>;
 }
 
 export default interface PVHTMLElement extends HTMLElement {

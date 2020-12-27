@@ -12,6 +12,7 @@ export default class PVIf {
   doubleElement: Comment;
   intialized: boolean;
   scope: any;
+  selfCompile: boolean = true;
 
   constructor(directive: IPVDirective) {
     this.intialized = false;
@@ -31,8 +32,8 @@ export default class PVIf {
     this.intialized = true;
   }
 
-  update(state: IPVObject) {
-    if (isEqual(this.state, state)) return;
+  update(state: IPVObject) {    
+    if (this.condition(this.state) === this.condition(state)) return;
 
     this.state = state;
     this.checkElementCondition();
@@ -42,22 +43,35 @@ export default class PVIf {
     return this.value.indexOf('!') > -1;
   }
 
-  checkElementCondition() {
+  condition(state: IPVObject): Boolean {
     const lastIndexSymbolOccurence = this.value.lastIndexOf('!');
     const clearedParam = this.value.substring(lastIndexSymbolOccurence + 1);
     const conditionSymbol = this.value.substring(0, lastIndexSymbolOccurence + 1);
     const splittedConditionBySimbols = conditionSymbol.split('!');
-    const value = getValueFromState(clearedParam, this.state);
+    const value = getValueFromState(clearedParam, state);
 
-    if (!splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value)) {
+    return splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value);
+  }
+
+  checkElementCondition() {
+    if (!this.condition(this.state)) {
       this.parentElement.replaceChild(this.doubleElement, this.element);
-    } else if (this.intialized){
-      this.element = new PVParahybaCompiler(this.state, this.elementTemplate, undefined, this.scope).compiledElement;
+    } else {
+      const compiledElement = new PVParahybaCompiler(this.state, this.elementTemplate, undefined, this.scope).compiledElement;
 
-      this.parentElement.replaceChild(
-        this.element, 
-        this.doubleElement,
-      );
+      if (this.intialized) {
+        this.parentElement.replaceChild(
+          compiledElement, 
+          this.doubleElement,
+        );
+      } else {
+        this.parentElement.replaceChild(
+          compiledElement, 
+          this.element,
+        );
+      }
+
+      this.element = compiledElement;
     }
   }
 }

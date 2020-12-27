@@ -12,6 +12,7 @@ export default class PVParahybaCompiler {
   scope: any;
   directives: Array<IPVObject> = [];
   uid: number;
+  componentElementsWithAttributes: Array<IPVObject> = [];
 
   constructor(state: Object, template: string = '', components: object = {}, scope?: any) {
     this.template = template;
@@ -49,37 +50,51 @@ export default class PVParahybaCompiler {
     return hasDirectiveAttribute;
   }
 
+  updateElementAttributeWithState(element: HTMLElement, attributeName: string, attributeValue: string) {
+    const value = getValueFromState(attributeValue, this.state);
+    element.setAttribute(attributeName.replace(':', ''), value);
+  }
+
   compileAttributes(element: HTMLElement) {
+    let elementAttributes: IPVObject = {};
+
     Array.from(element.attributes).forEach(attribute => {
-      const attributeName = attribute.name;
+      let attributeName = attribute.name;
       const attributeValue = attribute.value;
 
       if (attributeName.indexOf(':') > -1)  {
-        const value = getValueFromState(attributeValue, this.state);
-
+        attributeName = attributeName.replace(':', '');
         element.removeAttribute(attributeName);
-        element.setAttribute(attributeName.replace(':', ''), value);
+        elementAttributes[attributeName] = attributeValue;
+        this.updateElementAttributeWithState(element, attributeName, attributeValue);
       }
     });
+
+    if (Boolean(Object.keys(elementAttributes).length)) {
+      this.componentElementsWithAttributes.push({
+        $attrs: elementAttributes,
+        element,
+      });
+    }
   }
 
   compileComponent(componentElement: HTMLElement, componentName: string) {
     const attributes = componentElement.attributes;
-    let stateToProperties: IPVObject = {};
+    let componentAttributes: IPVObject = {};
 
     Object.keys(attributes).forEach((_key, index) => {
-      const attributeName = attributes[index].name;
-      const attributeValue = attributes[index].value;
+      const { name, value } = attributes[index];
 
-      if (!attributeValue) return;
-
-      if (attributeName.indexOf(':') > -1)  stateToProperties[attributeName] = getValueFromState(attributeValue, this.state);
-      else stateToProperties[attributeName] = attributeValue;
+      if (name.indexOf(':') > -1)  {
+        componentAttributes[name.replace(':', '')] = getValueFromState(value, this.state);
+      } else {
+        componentAttributes[name] = value;
+      }
     });
 
-    const compiledComponent = new this.components[componentName](stateToProperties).component.elementRef;
-    compiledComponent.scope = attributes;
-    componentElement.parentElement?.replaceChild(compiledComponent, componentElement);
+    const compiledComponent = new this.components[componentName](componentAttributes);
+    componentElement.parentElement?.replaceChild(compiledComponent.component.elementRef, componentElement);
+    this.compiledComponents.push(compiledComponent);
   }
 
   createElement(template: string): HTMLElement {
@@ -130,6 +145,14 @@ export default class PVParahybaCompiler {
     });
   }
 
+  updateElementsAttributes() {
+    this.componentElementsWithAttributes.forEach(({ $attrs, element }) => {
+      Object.keys($attrs).forEach((key) => {
+        this.updateElementAttributeWithState(element, key, $attrs[key]);
+      });
+    });
+  }
+
   updateDirectives() {
     this.directives.forEach((directive) => {
       directive.update(this.state);
@@ -144,6 +167,7 @@ export default class PVParahybaCompiler {
     this.state = state;
     this.scope = scope;
 
+    this.updateElementsAttributes();
     this.updateDirectives();
     this.updateComponents();
   }
