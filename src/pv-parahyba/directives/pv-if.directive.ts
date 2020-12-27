@@ -1,22 +1,27 @@
 import IPVDirective from '~/pv-parahyba/interfaces/pv-directive.interface';
 import { getValueFromState, isEqual } from '~/pv-parahyba/utils';
 import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
+import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
 
 export default class PVIf {
   state: any;
   element: any;
+  elementTemplate: string;
   value: any | undefined;
   parentElement: HTMLElement;
-  stuntmanElement: Comment;
+  doubleElement: Comment;
   intialized: boolean;
+  scope: any;
 
   constructor(directive: IPVDirective) {
     this.intialized = false;
     this.state = directive.state;
     this.element = directive.element;
+    this.elementTemplate = directive.element.outerHTML;
     this.value = directive.value;
     this.parentElement = directive.element.parentElement as HTMLElement;
-    this.stuntmanElement = document.createComment('');
+    this.doubleElement = document.createComment('');
+    this.scope = directive.scope;
 
     this.init();
   }
@@ -45,9 +50,14 @@ export default class PVIf {
     const value = getValueFromState(clearedParam, this.state);
 
     if (!splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value)) {
-      this.parentElement.replaceChild(this.stuntmanElement, this.element);
+      this.parentElement.replaceChild(this.doubleElement, this.element);
     } else if (this.intialized){
-      this.parentElement.replaceChild(this.element, this.stuntmanElement);
+      this.element = new PVParahybaCompiler(this.state, this.elementTemplate, undefined, this.scope).compiledElement;
+
+      this.parentElement.replaceChild(
+        this.element, 
+        this.doubleElement,
+      );
     }
   }
 }

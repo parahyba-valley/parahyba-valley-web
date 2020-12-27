@@ -49,7 +49,7 @@ import PVComponent from "~/pv-parahyba/extends/pv-component";
 
 ### Gerenciando os estados do componente
 Os **PVComponents** trabalham com _states_, sabendo exatamente o momento de recompilar sem precisar ficar escutando por alguma mudança em uma variável.
-Para criar um state basta chamar a função _stState_ passando a chave e o valor no qual queremos alterar:
+Para criar um state basta chamar a função _setState_ passando a chave e o valor no qual queremos alterar:
 ```typescript
 this.setState({ var1: 'teste' });
 ```
