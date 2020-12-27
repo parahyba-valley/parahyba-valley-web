@@ -1,6 +1,7 @@
 import directives from '~/pv-parahyba/directives';
 import { getValueFromState } from '~/pv-parahyba/utils/index';
 import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
+import HTMLElement, { PVElement } from './interfaces/pv-html-element.interface';
 
 export default class PVParahybaCompiler {
   template: string = '';
@@ -10,6 +11,7 @@ export default class PVParahybaCompiler {
   compiledComponents: Array<any> = [];
   scope: any;
   directives: Array<IPVObject> = [];
+  uid: number;
 
   constructor(state: Object, template: string = '', components: object = {}, scope?: any) {
     this.template = template;
@@ -17,6 +19,7 @@ export default class PVParahybaCompiler {
     this.components = components;
     this.scope = scope;
     this.compiledElement = this.compile();
+    this.uid = Date.now();
   }
 
   transpileParamToState(text: string | null): string {
@@ -95,7 +98,7 @@ export default class PVParahybaCompiler {
     let selfCompile = false;
 
     element.getAttributeNames().forEach((attribute) => {
-      if (directives[attribute] && !selfCompile) {
+      if (directives[attribute]) {
         const directive = this.applyDirectiveToElement(element, attribute);
         this.directives.push(directive);
 
@@ -127,14 +130,6 @@ export default class PVParahybaCompiler {
     });
   }
 
-  compile(): HTMLElement {
-    const fragment = this.createElement(this.template);
-
-    this.compileElement(fragment);
-
-    return fragment;
-  }
-
   updateDirectives() {
     this.directives.forEach((directive) => {
       directive.update(this.state);
@@ -151,5 +146,23 @@ export default class PVParahybaCompiler {
 
     this.updateDirectives();
     this.updateComponents();
+  }
+
+  addElementPVProperties(element: HTMLElement) {
+    let __pv__ : PVElement = {};
+    __pv__.isPVComponent = true;
+    __pv__.compiled = true;
+    __pv__.pvUID = this.uid;
+
+    element.__pv__ = __pv__;
+  }
+
+  compile(): HTMLElement {
+    const fragment = this.createElement(this.template);
+
+    this.compileElement(fragment);
+
+    this.addElementPVProperties(fragment);
+    return fragment;
   }
 }
