@@ -158,18 +158,13 @@ export default class PVParahybaCompiler {
       directive.update(this.state);
     });
   }
-  
-  updateComponents() {
-
-  }
 
   updateCompiledElement(state: any, scope: any) {
     this.state = state;
     this.scope = scope;
 
-    this.updateElementsAttributes();
     this.updateDirectives();
-    this.updateComponents();
+    this.updateElementsAttributes();
   }
 
   addElementPVProperties(element: HTMLElement) {
