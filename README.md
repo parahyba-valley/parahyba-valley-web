@@ -61,7 +61,7 @@ super({ componentPath: 'components/slider' })
 ```
 
 ### Passando atributos para um componente
-Para atribuir um atributo para um componente basta colocar uma propriedade na _tag_ do elemento. Para pegar um valor do state, precisamos colocar : na frente do atributo. Sendo a propriedade o nome da _property_ chamada dentro do elemento no qual você está representando pela _tag_ e o valor da propriedade é o caminho do valor dentro do seu _state_.
+Para atribuir um atributo para um componente basta colocar uma propriedade na _tag_ do elemento. Para pegar um valor do state precisamos colocar `:` na frente do atributo. Sendo a propriedade o nome da _property_ chamada dentro do elemento no qual você está representando pela _tag_ e o valor da propriedade é o caminho do valor dentro do seu _state_.
 ```html
 <slider :startups="startups"></slider>
 ```
