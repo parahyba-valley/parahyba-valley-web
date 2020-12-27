@@ -47,24 +47,14 @@ export const isEqual = (item1: any, item2: any): boolean => {
   if (length1 !== length2) return false;
   if (length1 === 0) return true;
 
-  let equals = true;
-
   for (let i = 0; i < item1.length; i++) {
     const value1 = item1[i];
+    const value2 = item2[i];
 
-    if (typeof(value1) !== 'object' && item2.indexOf(value1) < 0) {
-      equals = false;
-      break;
-    }
-
-    for (let w = 0; w < item2.length; w++) {
-      const value2 = item2[w];
-
-      if (!isEqual(value1, value2)) {
-        equals = false;
-        break;
-      }
+    if ((typeof(value1) !== 'object' && item2.indexOf(value1) < 0) || !isEqual(value1, value2)) {
+      return false;
     }
   }
-  return equals;
+
+  return true;
 };
