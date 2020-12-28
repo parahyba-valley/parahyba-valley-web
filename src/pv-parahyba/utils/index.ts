@@ -1,3 +1,4 @@
+import HTMLElement from '../interfaces/pv-html-element.interface';
 import IPVObject from '../interfaces/pv-object.interface';
 
 export const getValueFromState = (path: string, state: Object): any => {
@@ -58,3 +59,7 @@ export const isEqual = (item1: any, item2: any): boolean => {
 
   return true;
 };
+
+export const elementWasCompiledByHimself = (element: HTMLElement): Boolean => {
+  return Boolean(element.__pv__ && element.__pv__.compiled);
+}

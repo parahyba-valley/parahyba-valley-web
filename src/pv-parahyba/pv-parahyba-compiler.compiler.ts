@@ -1,5 +1,5 @@
 import directives from '~/pv-parahyba/directives';
-import { getValueFromState } from '~/pv-parahyba/utils/index';
+import { getValueFromState, elementWasCompiledByHimself } from '~/pv-parahyba/utils/index';
 import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
 import HTMLElement, { PVElement } from './interfaces/pv-html-element.interface';
 
@@ -109,21 +109,13 @@ export default class PVParahybaCompiler {
     return new directives[directiveName]({ state: this.state, element, value, scope: this.scope });
   }
 
-  compileDirectives(element: HTMLElement): boolean {
-    let selfCompile = false;
-
+  compileDirectives(element: HTMLElement) {
     element.getAttributeNames().forEach((attribute) => {
       if (directives[attribute]) {
         const directive = this.applyDirectiveToElement(element, attribute);
         this.directives.push(directive);
-
-        if (directive.selfCompile) {
-          selfCompile = true;
-        }
       }
     });
-
-    return selfCompile;
   }
 
   compileElement(element: HTMLElement) {
@@ -133,16 +125,17 @@ export default class PVParahybaCompiler {
     }
 
     if (this.elementHasDirective(element)) {
-      const selfCompile = this.compileDirectives(element);
-      if (selfCompile) return;
+      this.compileDirectives(element);
     }
 
-    this.compileAttributes(element);
+    if (!elementWasCompiledByHimself(element)) {
+      this.compileAttributes(element);
 
-    element.childNodes.forEach((node) => {
-      if (node.nodeType === Node.ELEMENT_NODE) this.compileElement(node as HTMLElement);
-      else if (node.nodeType === Node.TEXT_NODE) node.nodeValue = this.transpileParamToState(node.nodeValue);
-    });
+      element.childNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) this.compileElement(node as HTMLElement);
+        else if (node.nodeType === Node.TEXT_NODE) node.nodeValue = this.transpileParamToState(node.nodeValue);
+      });
+    }
   }
 
   updateElementsAttributes() {

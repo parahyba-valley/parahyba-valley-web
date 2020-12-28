@@ -12,7 +12,7 @@ export default class PVIf {
   doubleElement: Comment;
   intialized: boolean;
   scope: any;
-  selfCompile: boolean = true;
+  compiledClass: any;
 
   constructor(directive: IPVDirective) {
     this.intialized = false;
@@ -32,11 +32,16 @@ export default class PVIf {
     this.intialized = true;
   }
 
-  update(state: IPVObject) {    
-    if (this.condition(this.state) === this.condition(state)) return;
-
+  update(state: IPVObject) {   
+    const olderState = this.state; 
     this.state = state;
-    this.checkElementCondition();
+
+
+    if (this.condition(olderState) !== this.condition(state)) {
+      this.checkElementCondition();
+    } else {
+      this.updateCurrentClass(this.state);
+    }
   }
 
   hasConditionSymbol(): boolean {
@@ -53,11 +58,18 @@ export default class PVIf {
     return splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value);
   }
 
+  updateCurrentClass(state: IPVObject) {
+    if (!this.compiledClass) return;
+
+    this.compiledClass.updateCompiledElement(state);
+  }
+
   checkElementCondition() {
     if (!this.condition(this.state)) {
       this.parentElement.replaceChild(this.doubleElement, this.element);
     } else {
-      const compiledElement = new PVParahybaCompiler(this.state, this.elementTemplate, undefined, this.scope).compiledElement;
+      this.compiledClass = new PVParahybaCompiler(this.state, this.elementTemplate, undefined, this.scope);
+      const compiledElement = this.compiledClass.compiledElement;
 
       if (this.intialized) {
         this.parentElement.replaceChild(

@@ -9,7 +9,6 @@ export default class PVFor {
   parentElement: HTMLElement;
   originalTemplate: string;
   value: any | undefined;
-  selfCompile: boolean = true;
   scope: any;
   compiledElements: Array<IPVObject>;
 
