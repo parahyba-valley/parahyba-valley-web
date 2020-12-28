@@ -15,7 +15,7 @@ export default class Slider extends PVComponent {
     this.state = { loading: true, slides: [] };
     this.render();
 
-    addEventListener('visibilitychange', () => {
+    window.self.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         // The tab has lost focus
         clearInterval(this.sliderIntervalController);

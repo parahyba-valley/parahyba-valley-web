@@ -61,7 +61,12 @@ export default class PVFor {
     const elementHtml = this.originalTemplate;
 
     data.forEach((item: Object, index: Number) => {
-      const { compiledElement } = new PVParahybaCompiler({ ...this.state, [dataBasePath]: item, index }, elementHtml, undefined, this.scope);
+      const { compiledElement } = new PVParahybaCompiler(
+        { ...this.state, [dataBasePath]: item, index },
+        elementHtml,
+        undefined,
+        this.scope,
+      );
       this.compiledElements.push(compiledElement);
       parent.appendChild(compiledElement);
     });
