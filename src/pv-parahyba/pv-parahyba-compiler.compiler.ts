@@ -30,7 +30,7 @@ export default class PVParahybaCompiler {
     let currentState = this.state;
     const splittedPath = path.split('.');
 
-    for (let i = 0; i < splittedPath.length; i++) {
+    for (let i = 0; i < splittedPath.length; i += 1) {
       currentState = currentState[splittedPath[i]];
 
       if (currentState) {

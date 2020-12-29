@@ -5,7 +5,7 @@ export const getvalueFromState = (path: string, state: Object): any => {
   let currentState = state;
   const splittedPath = path.split('.');
 
-  for (let i = 0; i < splittedPath.length; i++) {
+  for (let i = 0; i < splittedPath.length; i += 1) {
     // @ts-expect-error
     currentState = currentState[splittedPath[i]];
 
@@ -49,7 +49,7 @@ export const isEqual = (item1: any, item2: any): boolean => {
 
   let equals = true;
 
-  for (let i = 0; i < item1.length; i++) {
+  for (let i = 0; i < item1.length; i += 1) {
     const value1 = item1[i];
 
     if (typeof (value1) !== 'object' && item2.indexOf(value1) < 0) {
@@ -57,7 +57,7 @@ export const isEqual = (item1: any, item2: any): boolean => {
       break;
     }
 
-    for (let w = 0; w < item2.length; w++) {
+    for (let w = 0; w < item2.length; w += 1) {
       const value2 = item2[w];
 
       if (!isEqual(value1, value2)) {

@@ -78,7 +78,7 @@ export default class Slider extends PVComponent {
     window.requestAnimationFrame(() => {
       const indicatorItens = this.indicators.children as HTMLCollectionOf<HTMLElement>;
       const indicatorsOffsetLeft = this.indicators.offsetLeft;
-      for (let i = 0; i < indicatorItens?.length; i++) {
+      for (let i = 0; i < indicatorItens?.length; i += 1) {
         const element = indicatorItens[i];
         element.classList.remove('slider__control-indicators__item--last');
         element.classList.remove('slider__control-indicators__item--active');

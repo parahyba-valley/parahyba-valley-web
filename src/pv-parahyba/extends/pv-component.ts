@@ -7,7 +7,7 @@ export default abstract class PVComponent {
 
   public compiledClass!: PVParahybaCompiler;
 
-  public _state: { [key: string]: any } = {};
+  public state: { [key: string]: any } = {};
 
   constructor(component: IPVComponent) {
     this.component = component;
@@ -21,20 +21,20 @@ export default abstract class PVComponent {
     return require('~/app/index.html');
   }
 
-  set state(state: any) {
-    this._state = state;
+  set State(state: any) {
+    this.state = state;
 
     if (this.compiledClass) {
       this.compiledClass.updateCompiledElement(this.state, this);
     }
   }
 
-  get state() {
-    return this._state;
+  get State() {
+    return this.state;
   }
 
   setState(obj: IPVObject) {
-    this._state = { ...this.state, ...obj };
+    this.state = { ...this.state, ...obj };
 
     if (this.compiledClass) {
       this.compiledClass.updateCompiledElement(this.state, this);
