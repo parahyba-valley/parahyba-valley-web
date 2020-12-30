@@ -1,11 +1,11 @@
 import { query as q } from 'faunadb';
 import getId from './utils/get-id';
-import ServerClient from './utils/fauna-auth';
+import { serverClient } from './utils/fauna-auth';
 
 exports.handler = (event, context, callback) => {
   const id = getId(event.path);
   console.log(`Function 'todo-read' invoked. Read id: ${id}`);
-  return ServerClient.query(q.Get(q.Ref(`classes/startups/${id}`)))
+  return serverClient.query(q.Get(q.Ref(`classes/startups/${id}`)))
     .then((response) => {
       console.log('success', response);
       return callback(null, {
