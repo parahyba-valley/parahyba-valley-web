@@ -48,7 +48,7 @@ export default class PVClick {
       const evaluatedFunctionArgs = functionArgs.map((arg) => {
         try {
           return Function(`return ${arg}`)();
-        } catch(_) {
+        } catch (_) {
           return getValueFromState(arg, this.state);
         }
       });

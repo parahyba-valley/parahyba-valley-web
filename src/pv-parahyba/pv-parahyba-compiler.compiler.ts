@@ -57,7 +57,7 @@ export default class PVParahybaCompiler {
       const attributeName = attribute.name;
       const attributeValue = attribute.value;
 
-      if (attributeName.indexOf(':') > -1)  {
+      if (attributeName.indexOf(':') > -1) {
         const value = getValueFromState(attributeValue, this.state);
 
         element.removeAttribute(attributeName);
@@ -67,8 +67,8 @@ export default class PVParahybaCompiler {
   }
 
   compileComponent(componentElement: HTMLElement, componentName: string) {
-    const attributes = componentElement.attributes;
-    let stateToProperties: IPVObject = {};
+    const { attributes } = componentElement;
+    const stateToProperties: IPVObject = {};
 
     Object.keys(attributes).forEach((_key, index) => {
       const attributeName = attributes[index].name;
@@ -76,8 +76,11 @@ export default class PVParahybaCompiler {
 
       if (!attributeValue) return;
 
-      if (attributeName.indexOf(':') > -1)  stateToProperties[attributeName] = getValueFromState(attributeValue, this.state);
-      else stateToProperties[attributeName] = attributeValue;
+      if (attributeName.indexOf(':') > -1) {
+        stateToProperties[attributeName] = getValueFromState(attributeValue, this.state);
+      } else {
+        stateToProperties[attributeName] = attributeValue;
+      }
     });
 
     const compiledComponent = new this.components[componentName](stateToProperties).component.elementRef;
@@ -148,7 +151,7 @@ export default class PVParahybaCompiler {
       directive.update(this.state);
     });
   }
-  
+
   updateComponents() {
 
   }
