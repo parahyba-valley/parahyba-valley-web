@@ -1,10 +1,13 @@
-import PVComponent from "~/pv-parahyba/extends/pv-component";
+import PVComponent from '~/pv-parahyba/extends/pv-component';
 import StartupsService from '~/app/services/startups-service';
 
 export default class Slider extends PVComponent {
   currentSlideIndex: number = 0;
+
   slides!: HTMLElement;
+
   indicators!: HTMLElement;
+
   sliderIntervalController: any;
 
   constructor() {
@@ -12,7 +15,7 @@ export default class Slider extends PVComponent {
     this.state = { loading: true, slides: [] };
     this.render();
 
-    addEventListener("visibilitychange", () => {
+    window.self.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         // The tab has lost focus
         clearInterval(this.sliderIntervalController);
@@ -25,11 +28,11 @@ export default class Slider extends PVComponent {
 
   onMounted() {
     StartupsService
-    .getAll()
-    .then((response) => {
-      const startups = response.sort(() => .5 - Math.random());
-      this.setState({ loading: false, slides: startups });
-    });
+      .getAll()
+      .then((response) => {
+        const startups = response.sort(() => 0.5 - Math.random());
+        this.setState({ loading: false, slides: startups });
+      });
   }
 
   previous() {
@@ -50,9 +53,9 @@ export default class Slider extends PVComponent {
       this.createSliderInterval();
     }
 
-    this.currentSlideIndex = this.currentSlideIndex + times;
+    this.currentSlideIndex += times;
     this.moveIndicators(this.currentSlideIndex);
-    this.slides.style.left = -100 * this.currentSlideIndex + '%';
+    this.slides.style.left = `${-100 * this.currentSlideIndex}%`;
 
     this.checkControlsVisibility();
   }
@@ -75,29 +78,28 @@ export default class Slider extends PVComponent {
     window.requestAnimationFrame(() => {
       const indicatorItens = this.indicators.children as HTMLCollectionOf<HTMLElement>;
       const indicatorsOffsetLeft = this.indicators.offsetLeft;
-      for (let i = 0; i < indicatorItens?.length; i++) {
+      for (let i = 0; i < indicatorItens?.length; i += 1) {
         const element = indicatorItens[i];
         element.classList.remove('slider__control-indicators__item--last');
         element.classList.remove('slider__control-indicators__item--active');
         element.classList.remove('slider__control-indicators__item--last');
-      };
+      }
 
       indicatorItens[activeIndex]?.classList.add('slider__control-indicators__item--active');
 
       if (
-        indicatorItens[activeIndex]?.offsetLeft >
-        (this.indicators.parentElement?.offsetWidth || 0) + (indicatorsOffsetLeft * -1)
+        indicatorItens[activeIndex]?.offsetLeft
+        > (this.indicators.parentElement?.offsetWidth || 0) + (indicatorsOffsetLeft * -1)
       ) {
         setTimeout(() => {
-          this.indicators.style.left = -(indicatorItens[activeIndex]?.offsetLeft - 80) + 'px';
+          this.indicators.style.left = `${-(indicatorItens[activeIndex]?.offsetLeft - 80)}px`;
         }, 100);
-
       } else if (
-        indicatorItens[activeIndex]?.offsetLeft <
-        (indicatorsOffsetLeft * -1)
+        indicatorItens[activeIndex]?.offsetLeft
+        < (indicatorsOffsetLeft * -1)
       ) {
         setTimeout(() => {
-          this.indicators.style.left = - indicatorItens[activeIndex]?.offsetLeft + 'px';
+          this.indicators.style.left = `${-indicatorItens[activeIndex]?.offsetLeft}px`;
         }, 100);
       }
     });
@@ -111,7 +113,7 @@ export default class Slider extends PVComponent {
 
   turnControlVisible(elementClass: string) {
     const control = this.component.elementRef?.getElementsByClassName(elementClass)[0];
-    if(control) {
+    if (control) {
       control.classList.remove('slider__control--hidden');
     }
   }
@@ -119,7 +121,7 @@ export default class Slider extends PVComponent {
   turnControlHidden(elementClass: string) {
     const control = this.component.elementRef?.getElementsByClassName(elementClass)[0];
 
-    if(control) {
+    if (control) {
       control.classList.add('slider__control--hidden');
     }
   }

@@ -13,9 +13,9 @@ module.exports = {
     proxy: {
       '/.netlify/functions': {
         target: 'http://0.0.0.0:9000',
-        pathRewrite: { "^/\\.netlify/functions" : ''}
-      }
-    }
+        pathRewrite: { '^/\\.netlify/functions': '' },
+      },
+    },
   },
   module: {
     rules: [
@@ -28,14 +28,14 @@ module.exports = {
         ],
       },
       {
-        test:  /\.ts/,
+        test: /\.ts/,
         use: 'ts-loader',
         include: [path.resolve(__dirname, 'src')],
         exclude: [
           path.resolve(__dirname, 'scripts'),
           path.resolve(__dirname, 'functions'),
           path.resolve(__dirname, 'built-lambda'),
-        ]
+        ],
       },
       {
         test: /\.html$/,
@@ -46,7 +46,7 @@ module.exports = {
           path.resolve(__dirname, 'scripts'),
           path.resolve(__dirname, 'functions'),
           path.resolve(__dirname, 'built-lambda'),
-        ]
+        ],
       },
       {
         test: /\.scss$/,
@@ -56,20 +56,20 @@ module.exports = {
           path.resolve(__dirname, 'scripts'),
           path.resolve(__dirname, 'functions'),
           path.resolve(__dirname, 'built-lambda'),
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   resolve: {
     alias: {
-      "~": path.resolve(__dirname, "src"),
+      '~': path.resolve(__dirname, 'src'),
     },
-    modules: [path.resolve(__dirname, "src"), "node_modules"],
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     extensions: ['.ts', '.js'],
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'public')
+    path: path.resolve(__dirname, 'public'),
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -83,4 +83,4 @@ module.exports = {
   optimization: {
     minimizer: [new UglifyJsPlugin()],
   },
-}
+};

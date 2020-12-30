@@ -3,8 +3,11 @@ import { getValueFromState } from '~/pv-parahyba/utils/index';
 
 export default class PVClick {
   state: any;
+
   element: any;
+
   value: any | undefined;
+
   scope: any;
 
   constructor(directive: IPVDirective) {
@@ -19,14 +22,14 @@ export default class PVClick {
   extractFunctionName(functionAttribute: string): string {
     return functionAttribute.substring(
       0,
-      functionAttribute.indexOf('(') > -1 ? functionAttribute.indexOf('(') : undefined
+      functionAttribute.indexOf('(') > -1 ? functionAttribute.indexOf('(') : undefined,
     );
   }
 
   extractFunctionArgs(functionAttribute: string): Array<string> | null {
     const functionArgs = functionAttribute.substring(
       functionAttribute.indexOf('(') + 1,
-      functionAttribute.indexOf(')') || 0
+      functionAttribute.indexOf(')') || 0,
     );
 
     if (functionArgs) {
@@ -45,17 +48,17 @@ export default class PVClick {
       const evaluatedFunctionArgs = functionArgs.map((arg) => {
         try {
           return Function(`return ${arg}`)();
-        } catch(_) {
+        } catch (_) {
           return getValueFromState(arg, this.state);
         }
       });
 
-      this.element.addEventListener('click', function() {
+      this.element.addEventListener('click', function () {
         // @ts-expect-error
-        this[functionName](...evaluatedFunctionArgs)
+        this[functionName](...evaluatedFunctionArgs);
       }.bind(this.scope), false);
     } else {
-      this.element.addEventListener('click', this.scope[functionName].bind(this.scope))
+      this.element.addEventListener('click', this.scope[functionName].bind(this.scope));
     }
 
     this.element.removeAttribute('pvClick');

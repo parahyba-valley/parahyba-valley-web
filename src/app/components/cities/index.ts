@@ -1,4 +1,4 @@
-import PVComponent from "~/pv-parahyba/extends/pv-component";
+import PVComponent from '~/pv-parahyba/extends/pv-component';
 
 export default class Cities extends PVComponent {
   constructor() {

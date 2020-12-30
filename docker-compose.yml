@@ -2,12 +2,15 @@ version: "3.8"
 
 volumes:
   parahyba-valley-node-modules:
+  user-home: # to keep bash and pry histories
 
 services:
   app:
     build:
       context: ./
       dockerfile: Dockerfile
+    env_file:
+      - envs/app.env
     working_dir: /app
     command: sh -c 'while true; do sleep 60; done'
     ports:
@@ -16,3 +19,4 @@ services:
     volumes:
       - .:/app
       - parahyba-valley-node-modules:/app/node_modules
+      - user-home:/root
