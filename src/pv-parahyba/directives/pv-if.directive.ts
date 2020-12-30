@@ -1,5 +1,5 @@
 import IPVDirective from '~/pv-parahyba/interfaces/pv-directive.interface';
-import { getvalueFromState, isEqual } from '~/pv-parahyba/utils';
+import { getValueFromState, isEqual } from '~/pv-parahyba/utils';
 import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
 
 export default class PVIf {
@@ -16,12 +16,11 @@ export default class PVIf {
   intialized: boolean;
 
   constructor(directive: IPVDirective) {
-    if (!directive.element.parentElement) throw new Error('PVFor does not accept empty parentElement');
     this.intialized = false;
     this.state = directive.state;
     this.element = directive.element;
     this.value = directive.value;
-    this.parentElement = directive.element.parentElement;
+    this.parentElement = directive.element.parentElement as HTMLElement;
     this.stuntmanElement = document.createComment('');
 
     this.init();
@@ -48,7 +47,7 @@ export default class PVIf {
     const clearedParam = this.value.substring(lastIndexSymbolOccurence + 1);
     const conditionSymbol = this.value.substring(0, lastIndexSymbolOccurence + 1);
     const splittedConditionBySimbols = conditionSymbol.split('!');
-    const value = getvalueFromState(clearedParam, this.state);
+    const value = getValueFromState(clearedParam, this.state);
 
     if (!splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value)) {
       this.parentElement.replaceChild(this.stuntmanElement, this.element);

@@ -1,6 +1,6 @@
 import IPVObject from '../interfaces/pv-object.interface';
 
-export const getvalueFromState = (path: string, state: Object): any => {
+export const getValueFromState = (path: string, state: Object): any => {
   let finalValue = null;
   let currentState = state;
   const splittedPath = path.split('.');
