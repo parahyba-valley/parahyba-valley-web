@@ -1,5 +1,5 @@
 import faunadb from 'faunadb';
 
-export const serverClient = new faunadb.Client({
+export default ServerClient = new faunadb.Client({
   secret: process.env.FAUNADB_SECRET,
 });

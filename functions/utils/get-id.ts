@@ -1,3 +1,3 @@
 module.exports = function getId(urlPath) {
-  return urlPath.match(/([^\/]*)\/*$/)[0];
+  return urlPath.match(/([^/]*)\/*$/)[0];
 };
