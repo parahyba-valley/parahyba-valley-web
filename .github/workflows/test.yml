@@ -3,7 +3,7 @@ name: Test
 on: pull_request
 
 jobs:
-  linter:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
