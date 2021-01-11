@@ -1,13 +1,10 @@
 <div class="slider section">
   <div class="container">
     <div class="slider__slides row" ref="slides">
-      <div pvIf="loading" class="slider__loading">
-        <img
-          src="../../../assets/short-logo-parahyba.png"
-          alt="Parahyba Valley logo"
-          class="slider__loading-img"
-        />
+      <div class="loading-wrapper" pvIf="loading">
+        <div class="loader"></div>
       </div>
+
       <div class="slider__slides__item" pvFor="slide in slides">
         <div class="col-6 col-12-sm center">
           <img
