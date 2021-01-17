@@ -1,5 +1,5 @@
 import IPVDirective from '~/pv-parahyba/interfaces/pv-directive.interface';
-import { getValueFromState, isEqual } from '~/pv-parahyba/utils';
+import { getValueFromState } from '~/pv-parahyba/utils';
 import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
 import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
 
@@ -9,7 +9,7 @@ export default class PVIf {
   element: any;
 
   elementTemplate: string;
-  
+
   value: any | undefined;
 
   parentElement: HTMLElement;
@@ -19,7 +19,7 @@ export default class PVIf {
   intialized: boolean;
 
   scope: any;
-  
+
   compiledClass: any;
 
   constructor(directive: IPVDirective) {
@@ -40,10 +40,9 @@ export default class PVIf {
     this.intialized = true;
   }
 
-  update(state: IPVObject) {   
-    const olderState = this.state; 
+  update(state: IPVObject) {
+    const olderState = this.state;
     this.state = state;
-
 
     if (this.condition(olderState) !== this.condition(state)) {
       this.checkElementCondition();
@@ -77,16 +76,16 @@ export default class PVIf {
       this.parentElement.replaceChild(this.doubleElement, this.element);
     } else {
       this.compiledClass = new PVParahybaCompiler(this.state, this.elementTemplate, undefined, this.scope);
-      const compiledElement = this.compiledClass.compiledElement;
+      const { compiledElement } = this.compiledClass;
 
       if (this.intialized) {
         this.parentElement.replaceChild(
-          compiledElement, 
+          compiledElement,
           this.doubleElement,
         );
       } else {
         this.parentElement.replaceChild(
-          compiledElement, 
+          compiledElement,
           this.element,
         );
       }

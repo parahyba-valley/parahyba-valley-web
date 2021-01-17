@@ -3,8 +3,8 @@ export type PVElement = {
   compiled?: boolean;
   pvUID?: number;
   properties?: Array<string>;
-}
+};
 
 export default interface PVHTMLElement extends HTMLElement {
-  __pv__: PVElement,
-};
+  pv: PVElement,
+}

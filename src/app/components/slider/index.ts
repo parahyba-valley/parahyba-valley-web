@@ -30,7 +30,7 @@ export default class Slider extends PVComponent {
     StartupsService
       .getAll()
       .then((response) => {
-        const startups = response.sort(() => .5 - Math.random());
+        const startups = response.sort(() => 0.5 - Math.random());
         this.setState({ loading: false, slides: startups });
         this.initSlider();
       });

@@ -15,7 +15,7 @@ export default class PVFor {
   value: any | undefined;
 
   scope: any;
-  
+
   compiledElements: Array<IPVObject>;
 
   constructor(directive: IPVDirective) {
@@ -57,18 +57,22 @@ export default class PVFor {
 
     data.forEach((item: object, index: number) => {
       if (this.compiledElements[index]) {
-        return this.compiledElements[index].updateCompiledElement({ ...this.state, [dataBasePath]: item, index });
+        this.compiledElements[index].updateCompiledElement({ ...this.state, [dataBasePath]: item, index });
+
+        return false;
       }
-      
+
       const elementClass = new PVParahybaCompiler(
-        { ...this.state, [dataBasePath]: item, index }, 
-        elementHtml, 
-        undefined, 
-        this.scope
+        { ...this.state, [dataBasePath]: item, index },
+        elementHtml,
+        undefined,
+        this.scope,
       );
 
       this.compiledElements.push(elementClass);
       parent.appendChild(elementClass.compiledElement);
+
+      return false;
     });
   }
 }

@@ -20,7 +20,7 @@ module.exports = {
     'import/extensions': 0,
     'max-len': ['error', { code: 120, ignoreUrls: true }],
     'class-methods-use-this': 1,
-    'import/no-extraneous-dependencies': 1,
+    'import/no-extraneous-dependencies': 0,
     'no-use-before-define': 1,
     'import/no-dynamic-require': 1,
     'global-require': 1,
