@@ -4,8 +4,10 @@ import IPVObject from '../interfaces/pv-object.interface';
 
 export default abstract class PVComponent {
   public component: IPVComponent;
+
   public compiledClass!: PVParahybaCompiler;
-  public _state: { [key: string]: any } = {};
+
+  public state: { [key: string]: any } = {};
 
   constructor(component: IPVComponent) {
     this.component = component;
@@ -16,23 +18,23 @@ export default abstract class PVComponent {
       return require(`~/app/${this.component.componentPath}/index.html`);
     }
 
-    return require(`~/app/index.html`);
+    return require('~/app/index.html');
   }
 
-  set state(state: any) {
-    this._state = state;
+  set State(state: any) {
+    this.state = state;
 
     if (this.compiledClass) {
       this.compiledClass.updateCompiledElement(this.state, this);
     }
   }
 
-  get state() {
-    return this._state;
+  get State() {
+    return this.state;
   }
 
   setState(obj: IPVObject) {
-    this._state = { ...this.state, ...obj };
+    this.state = { ...this.state, ...obj };
 
     if (this.compiledClass) {
       this.compiledClass.updateCompiledElement(this.state, this);
@@ -45,8 +47,8 @@ export default abstract class PVComponent {
         return require(`~/app/${this.component.componentPath}/index.scss`);
       }
 
-      return require(`~/app/index.scss`);
-    } catch(_) {
+      return require('~/app/index.scss');
+    } catch (_) {
       return null;
     }
   }
@@ -70,7 +72,7 @@ export default abstract class PVComponent {
   render(container?: HTMLElement): HTMLElement {
     this.importComponentStyle();
     this.compiledClass = new PVParahybaCompiler(
-      this.state, this.componentTemplate, this.component?.components, this
+      this.state, this.componentTemplate, this.component?.components, this,
     );
     const fragment = this.compiledClass.compiledElement;
 

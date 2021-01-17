@@ -5,13 +5,21 @@ import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
 
 export default class PVIf {
   state: any;
+
   element: any;
+
   elementTemplate: string;
+  
   value: any | undefined;
+
   parentElement: HTMLElement;
+
   doubleElement: Comment;
+
   intialized: boolean;
+
   scope: any;
+  
   compiledClass: any;
 
   constructor(directive: IPVDirective) {

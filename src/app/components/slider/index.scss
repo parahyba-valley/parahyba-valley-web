@@ -1,4 +1,5 @@
 @import 'scss/variables.scss';
+@import 'scss/loader';
 
 .startup-logo{
   width: 100%;
@@ -111,18 +112,11 @@
   background-color: $blue500;
 }
 
-.slider__loading {
+.loading-wrapper {
   display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
   justify-content: center;
-}
-
-.slider__loading-img {
-  width: 20%;
-  height: auto;
-  animation: loading 700ms infinite ease-in-out;
+  align-items: center;
+  height: 100%;
 }
 
 @keyframes loading {

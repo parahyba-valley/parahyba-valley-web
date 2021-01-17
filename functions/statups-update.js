@@ -1,27 +1,16 @@
-import faunadb from 'faunadb'
-import getId from './utils/get-id'
-
-const q = faunadb.query
-const client = new faunadb.Client({
-  secret: process.env.FAUNADB_SECRET
-})
+import { query as q } from 'faunadb';
+import getId from './utils/get-id';
+import { serverClient } from './utils/fauna-auth';
 
 exports.handler = (event, context, callback) => {
-  const data = JSON.parse(event.body)
-  const id = getId(event.path)
-  console.log(`Function 'startup-update' invoked. update id: ${id}`)
-  return client.query(q.Update(q.Ref(`classes/startups/${id}`), {data}))
-  .then((response) => {
-    console.log("success", response)
-    return callback(null, {
+  const data = JSON.parse(event.body);
+  const id = getId(event.path);
+  return serverClient.query(q.Update(q.Ref(`classes/startups/${id}`), { data }))
+    .then((response) => callback(null, {
       statusCode: 200,
-      body: JSON.stringify(response)
-    })
-  }).catch((error) => {
-    console.log("error", error)
-    return callback(null, {
+      body: JSON.stringify(response),
+    })).catch((error) => callback(null, {
       statusCode: 400,
-      body: JSON.stringify(error)
-    })
-  })
-}
+      body: JSON.stringify(error),
+    }));
+};

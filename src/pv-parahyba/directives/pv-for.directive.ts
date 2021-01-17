@@ -5,11 +5,17 @@ import { getValueFromState, isEqual } from '~/pv-parahyba/utils/index';
 
 export default class PVFor {
   state: any;
+
   element: any;
+
   parentElement: HTMLElement;
+
   originalTemplate: string;
+
   value: any | undefined;
+
   scope: any;
+  
   compiledElements: Array<IPVObject>;
 
   constructor(directive: IPVDirective) {
@@ -54,9 +60,8 @@ export default class PVFor {
         return this.compiledElements[index].updateCompiledElement({ ...this.state, [dataBasePath]: item, index });
       }
       
-      const elementClass = new PVParahybaCompiler({ 
-        ...this.state, 
-        [dataBasePath]: item, index }, 
+      const elementClass = new PVParahybaCompiler(
+        { ...this.state, [dataBasePath]: item, index }, 
         elementHtml, 
         undefined, 
         this.scope

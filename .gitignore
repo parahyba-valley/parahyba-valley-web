@@ -3,3 +3,7 @@ public/
 built-lambda/
 data/
 .DS_Store
+
+# environment secrets
+#
+envs/*.env

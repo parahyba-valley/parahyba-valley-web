@@ -5,11 +5,17 @@ import HTMLElement, { PVElement } from './interfaces/pv-html-element.interface';
 
 export default class PVParahybaCompiler {
   template: string = '';
+
   state: { [key: string]: any };
-  components:  { [key: string]: any };
+
+  components: { [key: string]: any };
+
   compiledElement: HTMLElement;
+
   compiledComponents: Array<any> = [];
+
   scope: any;
+
   directives: Array<IPVObject> = [];
   uid: number;
   componentElementsWithAttributes: Array<IPVObject> = [];
@@ -41,7 +47,7 @@ export default class PVParahybaCompiler {
   elementHasDirective(element: HTMLElement): boolean {
     let hasDirectiveAttribute = false;
 
-    Array.from(element.attributes).forEach(attribute => {
+    Array.from(element.attributes).forEach((attribute) => {
       if (directives[attribute.localName]) {
         hasDirectiveAttribute = true;
       }
@@ -59,14 +65,13 @@ export default class PVParahybaCompiler {
     let elementAttributes: IPVObject = {};
 
     Array.from(element.attributes).forEach(attribute => {
-      let attributeName = attribute.name;
-      const attributeValue = attribute.value;
+      const { name, value } = attribute;
 
-      if (attributeName.indexOf(':') > -1)  {
-        attributeName = attributeName.replace(':', '');
+      if (name.indexOf(':') > -1)  {
+        const attributeName = name.replace(':', '');
         element.removeAttribute(attributeName);
-        elementAttributes[attributeName] = attributeValue;
-        this.updateElementAttributeWithState(element, attributeName, attributeValue);
+        elementAttributes[attributeName] = value;
+        this.updateElementAttributeWithState(element, attributeName, value);
       }
     });
 
@@ -79,14 +84,15 @@ export default class PVParahybaCompiler {
   }
 
   compileComponent(componentElement: HTMLElement, componentName: string) {
-    const attributes = componentElement.attributes;
+    const { attributes } = componentElement;
     let componentAttributes: IPVObject = {};
 
     Object.keys(attributes).forEach((_key, index) => {
       const { name, value } = attributes[index];
 
       if (name.indexOf(':') > -1)  {
-        componentAttributes[name.replace(':', '')] = getValueFromState(value, this.state);
+        const attributeName = name.replace(':', '');
+        componentAttributes[attributeName] = getValueFromState(value, this.state);
       } else {
         componentAttributes[name] = value;
       }
@@ -98,7 +104,7 @@ export default class PVParahybaCompiler {
   }
 
   createElement(template: string): HTMLElement {
-    let templateElement = document.createElement('template');
+    const templateElement = document.createElement('template');
     templateElement.innerHTML += template;
     return templateElement.content.children[0] as HTMLElement;
   }
@@ -106,7 +112,9 @@ export default class PVParahybaCompiler {
   applyDirectiveToElement(element: HTMLElement, directiveName: string): typeof directives {
     const value = element.getAttribute(directiveName);
     element.removeAttribute(directiveName);
-    return new directives[directiveName]({ state: this.state, element, value, scope: this.scope });
+    return new directives[directiveName]({
+      state: this.state, element, value, scope: this.scope,
+    });
   }
 
   compileDirectives(element: HTMLElement) {
