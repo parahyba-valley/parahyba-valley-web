@@ -1,7 +1,7 @@
 import PVComponent from '~/pv-parahyba/extends/pv-component';
 import StartupsService from '~/app/services/startups-service';
-
 export default class Slider extends PVComponent {
+
   currentSlideIndex: number = 0;
 
   slides!: HTMLElement;
@@ -9,10 +9,9 @@ export default class Slider extends PVComponent {
   indicators!: HTMLElement;
 
   sliderIntervalController: any;
-
+  
   constructor() {
     super({ componentPath: 'components/slider' });
-    this.state = { loading: true, slides: [] };
     this.render();
 
     window.self.addEventListener('visibilitychange', () => {
@@ -26,12 +25,20 @@ export default class Slider extends PVComponent {
     });
   }
 
+  data() {
+    return {
+      loading: true,
+      startups: [],
+    };
+  };
+
   onMounted() {
     StartupsService
       .getAll()
       .then((response) => {
         const startups = response.sort(() => 0.5 - Math.random());
-        this.setState({ loading: false, slides: startups });
+        this.loading = false;
+        this.startups = startups;
         this.initSlider();
       });
   }
@@ -45,7 +52,7 @@ export default class Slider extends PVComponent {
   }
 
   moveSlides(times: number) {
-    if (!this.state.slides[this.currentSlideIndex + times]) {
+    if (!this.startups[this.currentSlideIndex + times]) {
       return;
     }
 
@@ -62,7 +69,7 @@ export default class Slider extends PVComponent {
   }
 
   checkControlsVisibility() {
-    if (this.currentSlideIndex + 1 >= this.state.slides.length) {
+    if (this.currentSlideIndex + 1 >= this.startups.length) {
       this.turnControlHidden('slider__control--right');
     } else {
       this.turnControlVisible('slider__control--right');

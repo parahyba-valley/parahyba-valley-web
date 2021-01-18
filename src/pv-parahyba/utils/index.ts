@@ -2,13 +2,12 @@ import HTMLElement from '../interfaces/pv-html-element.interface';
 import IPVObject from '../interfaces/pv-object.interface';
 import directives from '~/pv-parahyba/directives';
 
-export const getValueFromState = (path: string, state: Object): any => {
-  let finalValue = null;
+export const getValueFromState = (path: string, state: IPVObject): any => {
+  let finalValue: any = null;
   let currentState = state;
   const splittedPath = path.split('.');
 
   for (let i = 0; i < splittedPath.length; i += 1) {
-    // @ts-expect-error
     currentState = currentState[splittedPath[i]];
 
     if (currentState !== undefined) {
