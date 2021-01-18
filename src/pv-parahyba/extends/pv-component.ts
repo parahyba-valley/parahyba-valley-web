@@ -9,7 +9,7 @@ export default abstract class PVComponent {
   public compiledClass!: PVParahybaCompiler;
 
   public state: { [key: string]: any } = {};
-  
+
   constructor(component: IPVComponent) {
     this.state = this.data();
     this.component = component;
@@ -40,7 +40,7 @@ export default abstract class PVComponent {
       });
   }
 
-  data() { return {}}
+  data() { return {}; }
 
   update() {
     if (this.compiledClass) {

@@ -1,7 +1,7 @@
 import PVComponent from '~/pv-parahyba/extends/pv-component';
 import StartupsService from '~/app/services/startups-service';
-export default class Slider extends PVComponent {
 
+export default class Slider extends PVComponent {
   currentSlideIndex: number = 0;
 
   slides!: HTMLElement;
@@ -9,7 +9,7 @@ export default class Slider extends PVComponent {
   indicators!: HTMLElement;
 
   sliderIntervalController: any;
-  
+
   constructor() {
     super({ componentPath: 'components/slider' });
     this.render();
@@ -30,7 +30,7 @@ export default class Slider extends PVComponent {
       loading: true,
       startups: [],
     };
-  };
+  }
 
   onMounted() {
     StartupsService
