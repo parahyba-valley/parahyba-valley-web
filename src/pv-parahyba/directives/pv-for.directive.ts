@@ -14,11 +14,9 @@ export default class PVFor {
 
   value: any | undefined;
 
-  selfCompile: boolean = true;
-
   scope: any;
 
-  compiledElements: Array<any>;
+  compiledElements: Array<IPVObject>;
 
   constructor(directive: IPVDirective) {
     this.state = directive.state;
@@ -37,38 +35,44 @@ export default class PVFor {
   }
 
   update(state: IPVObject) {
-    if (isEqual(this.state, state)) return;
+    if (isEqual(this.data(this.state), this.data(state))) return;
 
     this.state = state;
     this.compileElements();
   }
 
-  clearCompiledElements() {
-    this.compiledElements.forEach((element: HTMLElement) => {
-      element.remove();
-    });
+  data(state: IPVObject): IPVObject {
+    const splittedValue = this.value.split(' in ');
+    const dataKey = splittedValue[1];
 
-    this.compiledElements = [];
+    return getValueFromState(dataKey, state);
   }
 
   compileElements() {
     const parent = this.parentElement;
-    this.clearCompiledElements();
     const splittedValue = this.value.split(' in ');
-    const dataKey = splittedValue[1];
     const dataBasePath = splittedValue[0];
-    const data = getValueFromState(dataKey, this.state);
+    const data = this.data(this.state);
     const elementHtml = this.originalTemplate;
 
-    data.forEach((item: Object, index: Number) => {
-      const { compiledElement } = new PVParahybaCompiler(
+    data.forEach((item: object, index: number) => {
+      if (this.compiledElements[index]) {
+        this.compiledElements[index].updateCompiledElement({ ...this.state, [dataBasePath]: item, index });
+
+        return false;
+      }
+
+      const elementClass = new PVParahybaCompiler(
         { ...this.state, [dataBasePath]: item, index },
         elementHtml,
         undefined,
         this.scope,
       );
-      this.compiledElements.push(compiledElement);
-      parent.appendChild(compiledElement);
+
+      this.compiledElements.push(elementClass);
+      parent.appendChild(elementClass.compiledElement);
+
+      return false;
     });
   }
 }

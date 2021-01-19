@@ -5,17 +5,17 @@
         <div class="loader"></div>
       </div>
 
-      <div class="slider__slides__item" pvFor="slide in slides">
+      <div class="slider__slides__item" pvFor="startup in startups">
         <div class="col-6 col-12-sm center">
           <img
             class="startup-logo"
             alt="Logo da empresa"
-            pvIf="slide.data.profile_image"
-            :src="slide.data.profile_image"
+            pvIf="startup.data.profile_image"
+            :src="startup.data.profile_image"
           >
           <img
             src="../../../assets/logo-parahyba-vertical.png"
-            pvIf="!slide.data.profile_image"
+            pvIf="!startup.data.profile_image"
             alt="Logo da empresa logo"
             class="startup-logo"
           >
@@ -23,22 +23,22 @@
         <div class="col-6 col-12-sm">
           <div class="row">
             <div class="col-12 col-12-sm">
-              <h3 class="title title--small">{{ slide.data.name }}</h3>
+              <h3 class="title title--small">{{ startup.data.name }}</h3>
             </div>
           </div>
           <div class="row">
             <div class="col-12 col-12-sm">
-              <p pvIf="slide.data.description" class="text slider-item__description">{{ slide.data.description }}</p>
+              <p pvIf="startup.data.description" class="text slider-item__description">{{ startup.data.description }}</p>
             </div>
           </div>
           <div class="row">
             <div class="col-12 col-12-sm">
-              <p pvIf="!slide.data.description" class="text slider-item__description">Sem descrição</p>
+              <p pvIf="!startup.data.description" class="text slider-item__description">Sem descrição</p>
             </div>
           </div>
           <div class="row">
             <div class="col-12 col-12-sm">
-              <p class="text" pvIf="slide.data.place">{{ slide.data.place }}</p>
+              <p class="text" pvIf="startup.data.place">{{ startup.data.place }}</p>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
           <div class="slider__control-indicators__itens" ref="indicators">
             <div
               class="slider__control-indicators__item"
-              pvFor="slide in slides"
+              pvFor="startup in startups"
               pvClick="changeActiveSlide(index, 'teste')"
             >
             </div>

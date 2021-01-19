@@ -1,12 +1,13 @@
+import HTMLElement from '../interfaces/pv-html-element.interface';
 import IPVObject from '../interfaces/pv-object.interface';
+import directives from '~/pv-parahyba/directives';
 
-export const getValueFromState = (path: string, state: Object): any => {
-  let finalValue = null;
+export const getValueFromState = (path: string, state: IPVObject): any => {
+  let finalValue: any = null;
   let currentState = state;
   const splittedPath = path.split('.');
 
   for (let i = 0; i < splittedPath.length; i += 1) {
-    // @ts-expect-error
     currentState = currentState[splittedPath[i]];
 
     if (currentState !== undefined) {
@@ -47,24 +48,30 @@ export const isEqual = (item1: any, item2: any): boolean => {
   if (length1 !== length2) return false;
   if (length1 === 0) return true;
 
-  let equals = true;
-
   for (let i = 0; i < item1.length; i += 1) {
     const value1 = item1[i];
+    const value2 = item2[i];
 
-    if (typeof (value1) !== 'object' && item2.indexOf(value1) < 0) {
-      equals = false;
-      break;
-    }
-
-    for (let w = 0; w < item2.length; w += 1) {
-      const value2 = item2[w];
-
-      if (!isEqual(value1, value2)) {
-        equals = false;
-        break;
-      }
+    if ((typeof (value1) !== 'object' && item2.indexOf(value1) < 0) || !isEqual(value1, value2)) {
+      return false;
     }
   }
-  return equals;
+
+  return true;
+};
+
+export const elementWasCompiledByHimself = (element: HTMLElement): Boolean => (
+  Boolean(element.pv && element.pv.compiled)
+);
+
+export const elementHasDirective = (element: HTMLElement): boolean => {
+  let hasDirectiveAttribute = false;
+
+  Array.from(element.attributes).forEach((attribute) => {
+    if (directives[attribute.localName]) {
+      hasDirectiveAttribute = true;
+    }
+  });
+
+  return hasDirectiveAttribute;
 };

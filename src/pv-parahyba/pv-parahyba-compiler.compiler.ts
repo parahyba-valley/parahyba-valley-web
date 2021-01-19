@@ -1,6 +1,7 @@
 import directives from '~/pv-parahyba/directives';
-import { getValueFromState } from '~/pv-parahyba/utils/index';
+import { getValueFromState, elementWasCompiledByHimself, elementHasDirective } from '~/pv-parahyba/utils/index';
 import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
+import HTMLElement, { PVElement } from './interfaces/pv-html-element.interface';
 
 export default class PVParahybaCompiler {
   template: string = '';
@@ -17,12 +18,17 @@ export default class PVParahybaCompiler {
 
   directives: Array<IPVObject> = [];
 
+  uid: number;
+
+  componentElementsWithAttributes: Array<IPVObject> = [];
+
   constructor(state: Object, template: string = '', components: object = {}, scope?: any) {
     this.template = template;
     this.state = state;
     this.components = components;
     this.scope = scope;
     this.compiledElement = this.compile();
+    this.uid = Date.now();
   }
 
   transpileParamToState(text: string | null): string {
@@ -40,52 +46,51 @@ export default class PVParahybaCompiler {
     return textToReplace;
   }
 
-  elementHasDirective(element: HTMLElement): boolean {
-    let hasDirectiveAttribute = false;
-
-    Array.from(element.attributes).forEach((attribute) => {
-      if (directives[attribute.localName]) {
-        hasDirectiveAttribute = true;
-      }
-    });
-
-    return hasDirectiveAttribute;
+  updateElementAttributeWithState(element: HTMLElement, attributeName: string, attributeValue: string) {
+    const value = getValueFromState(attributeValue, this.state);
+    element.setAttribute(attributeName.replace(':', ''), value);
   }
 
   compileAttributes(element: HTMLElement) {
+    const elementAttributes: IPVObject = {};
+
     Array.from(element.attributes).forEach((attribute) => {
-      const attributeName = attribute.name;
-      const attributeValue = attribute.value;
+      const { name, value } = attribute;
 
-      if (attributeName.indexOf(':') > -1) {
-        const value = getValueFromState(attributeValue, this.state);
-
+      if (name.indexOf(':') > -1) {
+        const attributeName = name.replace(':', '');
         element.removeAttribute(attributeName);
-        element.setAttribute(attributeName.replace(':', ''), value);
+        elementAttributes[attributeName] = value;
+        this.updateElementAttributeWithState(element, attributeName, value);
       }
     });
+
+    if (Object.keys(elementAttributes).length) {
+      this.componentElementsWithAttributes.push({
+        $attrs: elementAttributes,
+        element,
+      });
+    }
   }
 
   compileComponent(componentElement: HTMLElement, componentName: string) {
     const { attributes } = componentElement;
-    const stateToProperties: IPVObject = {};
+    const componentAttributes: IPVObject = {};
 
     Object.keys(attributes).forEach((_key, index) => {
-      const attributeName = attributes[index].name;
-      const attributeValue = attributes[index].value;
+      const { name, value } = attributes[index];
 
-      if (!attributeValue) return;
-
-      if (attributeName.indexOf(':') > -1) {
-        stateToProperties[attributeName] = getValueFromState(attributeValue, this.state);
+      if (name.indexOf(':') > -1) {
+        const attributeName = name.replace(':', '');
+        componentAttributes[attributeName] = getValueFromState(value, this.state);
       } else {
-        stateToProperties[attributeName] = attributeValue;
+        componentAttributes[name] = value;
       }
     });
 
-    const compiledComponent = new this.components[componentName](stateToProperties).component.elementRef;
-    compiledComponent.scope = attributes;
-    componentElement.parentElement?.replaceChild(compiledComponent, componentElement);
+    const compiledComponent = new this.components[componentName](componentAttributes);
+    componentElement.parentElement?.replaceChild(compiledComponent.component.elementRef, componentElement);
+    this.compiledComponents.push(compiledComponent);
   }
 
   createElement(template: string): HTMLElement {
@@ -102,21 +107,13 @@ export default class PVParahybaCompiler {
     });
   }
 
-  compileDirectives(element: HTMLElement): boolean {
-    let selfCompile = false;
-
+  compileDirectives(element: HTMLElement) {
     element.getAttributeNames().forEach((attribute) => {
-      if (directives[attribute] && !selfCompile) {
+      if (directives[attribute]) {
         const directive = this.applyDirectiveToElement(element, attribute);
         this.directives.push(directive);
-
-        if (directive.selfCompile) {
-          selfCompile = true;
-        }
       }
     });
-
-    return selfCompile;
   }
 
   compileElement(element: HTMLElement) {
@@ -125,25 +122,26 @@ export default class PVParahybaCompiler {
       return;
     }
 
-    if (this.elementHasDirective(element)) {
-      const selfCompile = this.compileDirectives(element);
-      if (selfCompile) return;
+    if (elementHasDirective(element)) {
+      this.compileDirectives(element);
     }
 
-    this.compileAttributes(element);
+    if (!elementWasCompiledByHimself(element)) {
+      this.compileAttributes(element);
 
-    element.childNodes.forEach((node) => {
-      if (node.nodeType === Node.ELEMENT_NODE) this.compileElement(node as HTMLElement);
-      else if (node.nodeType === Node.TEXT_NODE) node.nodeValue = this.transpileParamToState(node.nodeValue);
-    });
+      element.childNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) this.compileElement(node as HTMLElement);
+        else if (node.nodeType === Node.TEXT_NODE) node.nodeValue = this.transpileParamToState(node.nodeValue);
+      });
+    }
   }
 
-  compile(): HTMLElement {
-    const fragment = this.createElement(this.template);
-
-    this.compileElement(fragment);
-
-    return fragment;
+  updateElementsAttributes() {
+    this.componentElementsWithAttributes.forEach(({ $attrs, element }) => {
+      Object.keys($attrs).forEach((key) => {
+        this.updateElementAttributeWithState(element, key, $attrs[key]);
+      });
+    });
   }
 
   updateDirectives() {
@@ -152,15 +150,29 @@ export default class PVParahybaCompiler {
     });
   }
 
-  updateComponents() {
-
-  }
-
   updateCompiledElement(state: any, scope: any) {
     this.state = state;
     this.scope = scope;
 
     this.updateDirectives();
-    this.updateComponents();
+    this.updateElementsAttributes();
+  }
+
+  addElementPVProperties(element: HTMLElement) {
+    const pv : PVElement = {};
+    pv.isPVComponent = true;
+    pv.compiled = true;
+    pv.pvUID = this.uid;
+
+    element.pv = pv;
+  }
+
+  compile(): HTMLElement {
+    const fragment = this.createElement(this.template);
+
+    this.compileElement(fragment);
+
+    this.addElementPVProperties(fragment);
+    return fragment;
   }
 }

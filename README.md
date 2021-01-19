@@ -51,11 +51,18 @@ import PVComponent from "~/pv-parahyba/extends/pv-component";
 
 ### Gerenciando os estados do componente
 Os **PVComponents** trabalham com _states_, sabendo exatamente o momento de recompilar sem precisar ficar escutando por alguma mudança em uma variável.
-Para criar um state basta chamar a função _stState_ passando a chave e o valor no qual queremos alterar:
+Para criar um state basta criar um método data retornando um objeto com as variáveis desejada e seus valores iniciais:
 ```typescript
-this.setState({ var1: 'teste' });
+data() => { var1: 'teste' };
 ```
-
+Após compilar, a variável var1, estará disponível para ser acessada através do seu this, ex:
+```typescript
+console.log(this.var1);
+```
+para alterar a variável, basta setar um valor para a mesma, ex:
+```typescript
+this.var1 = 'teste de update';
+```
 ### Renderizando o componente
 Dentro do _constructor_ do seu componente será necessário chamar um `super()` referente ao _extends_ do **PVComponent**. No `super` você precisa passar um objeto contendo o atributo `templatePath` indicando o caminho dos arquivos do seu componente. É preciso colocar o caminho a partir da pasta `/app/`:
 ```typescript

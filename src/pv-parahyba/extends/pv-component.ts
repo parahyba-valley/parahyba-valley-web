@@ -1,8 +1,9 @@
 import IPVComponent from '~/pv-parahyba/interfaces/pv-component.interface';
 import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
-import IPVObject from '../interfaces/pv-object.interface';
 
 export default abstract class PVComponent {
+  [key: string]: any;
+
   public component: IPVComponent;
 
   public compiledClass!: PVParahybaCompiler;
@@ -10,7 +11,9 @@ export default abstract class PVComponent {
   public state: { [key: string]: any } = {};
 
   constructor(component: IPVComponent) {
+    this.state = this.data();
     this.component = component;
+    this.addWatchForStateAttributes();
   }
 
   get componentTemplate() {
@@ -21,23 +24,27 @@ export default abstract class PVComponent {
     return require('~/app/index.html');
   }
 
-  set State(state: any) {
-    this.state = state;
+  addWatchForStateAttributes() {
+    Object.keys(this.state)
+      .forEach((key) => {
+        Object.defineProperty(this, key, {
+          get: () => (this.state[key]),
+          set: (value) => {
+            this.state[key] = value;
 
-    if (this.compiledClass) {
-      this.compiledClass.updateCompiledElement(this.state, this);
-    }
+            this.update();
+          },
+        });
+
+        return false;
+      });
   }
 
-  get State() {
-    return this.state;
-  }
+  data() { return {}; }
 
-  setState(obj: IPVObject) {
-    this.state = { ...this.state, ...obj };
-
+  update() {
     if (this.compiledClass) {
-      this.compiledClass.updateCompiledElement(this.state, this);
+      this.compiledClass.updateCompiledElement({ ...this.state }, this);
     }
   }
 
@@ -62,7 +69,6 @@ export default abstract class PVComponent {
         throw new Error("elements can't have an empty ref attribute");
       }
 
-      // @ts-expect-error
       this[ref] = elementToRef;
     });
   }
@@ -72,7 +78,7 @@ export default abstract class PVComponent {
   render(container?: HTMLElement): HTMLElement {
     this.importComponentStyle();
     this.compiledClass = new PVParahybaCompiler(
-      this.state, this.componentTemplate, this.component?.components, this,
+      { ...this.state }, this.componentTemplate, this.component?.components, this,
     );
     const fragment = this.compiledClass.compiledElement;
 

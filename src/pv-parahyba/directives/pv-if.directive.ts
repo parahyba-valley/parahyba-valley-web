@@ -1,27 +1,36 @@
 import IPVDirective from '~/pv-parahyba/interfaces/pv-directive.interface';
-import { getValueFromState, isEqual } from '~/pv-parahyba/utils';
+import { getValueFromState } from '~/pv-parahyba/utils';
 import IPVObject from '~/pv-parahyba/interfaces/pv-object.interface';
+import PVParahybaCompiler from '~/pv-parahyba/pv-parahyba-compiler.compiler';
 
 export default class PVIf {
   state: any;
 
   element: any;
 
+  elementTemplate: string;
+
   value: any | undefined;
 
   parentElement: HTMLElement;
 
-  stuntmanElement: Comment;
+  doubleElement: Comment;
 
   intialized: boolean;
+
+  scope: any;
+
+  compiledClass: any;
 
   constructor(directive: IPVDirective) {
     this.intialized = false;
     this.state = directive.state;
     this.element = directive.element;
+    this.elementTemplate = directive.element.outerHTML;
     this.value = directive.value;
     this.parentElement = directive.element.parentElement as HTMLElement;
-    this.stuntmanElement = document.createComment('');
+    this.doubleElement = document.createComment('');
+    this.scope = directive.scope;
 
     this.init();
   }
@@ -32,27 +41,56 @@ export default class PVIf {
   }
 
   update(state: IPVObject) {
-    if (isEqual(this.state, state)) return;
-
+    const olderState = this.state;
     this.state = state;
-    this.checkElementCondition();
+
+    if (this.condition(olderState) !== this.condition(state)) {
+      this.checkElementCondition();
+    } else {
+      this.updateCurrentClass(this.state);
+    }
   }
 
   hasConditionSymbol(): boolean {
     return this.value.indexOf('!') > -1;
   }
 
-  checkElementCondition() {
+  condition(state: IPVObject): Boolean {
     const lastIndexSymbolOccurence = this.value.lastIndexOf('!');
     const clearedParam = this.value.substring(lastIndexSymbolOccurence + 1);
     const conditionSymbol = this.value.substring(0, lastIndexSymbolOccurence + 1);
     const splittedConditionBySimbols = conditionSymbol.split('!');
-    const value = getValueFromState(clearedParam, this.state);
+    const value = getValueFromState(clearedParam, state);
 
-    if (!splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value)) {
-      this.parentElement.replaceChild(this.stuntmanElement, this.element);
-    } else if (this.intialized) {
-      this.parentElement.replaceChild(this.element, this.stuntmanElement);
+    return splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value);
+  }
+
+  updateCurrentClass(state: IPVObject) {
+    if (!this.compiledClass) return;
+
+    this.compiledClass.updateCompiledElement(state);
+  }
+
+  checkElementCondition() {
+    if (!this.condition(this.state)) {
+      this.parentElement.replaceChild(this.doubleElement, this.element);
+    } else {
+      this.compiledClass = new PVParahybaCompiler(this.state, this.elementTemplate, undefined, this.scope);
+      const { compiledElement } = this.compiledClass;
+
+      if (this.intialized) {
+        this.parentElement.replaceChild(
+          compiledElement,
+          this.doubleElement,
+        );
+      } else {
+        this.parentElement.replaceChild(
+          compiledElement,
+          this.element,
+        );
+      }
+
+      this.element = compiledElement;
     }
   }
 }
