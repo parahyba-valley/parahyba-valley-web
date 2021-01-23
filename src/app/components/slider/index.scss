@@ -1,11 +1,13 @@
 @import 'scss/variables.scss';
 @import 'scss/loader';
 
-.startup-logo{
-  width: 100%;
-  max-width: 200px;
+.startup-logo {
+  display: block;
   height: auto;
-
+  margin: 0 auto;
+  max-width: 200px;
+  width: 100%;
+  
   @media (max-width: $screen-phone) {
     max-width: 150px;
   }
@@ -73,50 +75,52 @@
 }
 
 .slider__control-indicators__wrapper {
-  position: relative;
-  width: 100px;
   height: $size-m;
+  margin: 0 auto;
+  position: relative;
   overflow: hidden;
+  text-align: center;
   white-space: nowrap;
+  width: 100px;
 }
 
 .slider__control-indicators__itens {
-  position: absolute;
-  line-height: $size-m;
   left: 0;
+  line-height: $size-m;
+  position: absolute;
   top: 0;
   transition: left 200ms ease-in-out;
 }
 
 .slider__control-indicators__item {
+  background-color: $blue000;
+  border: 1px solid #eaeaea;
   border-radius: 50%;
   cursor: pointer;
-  background-color: $blue000;
-  width: calc(#{$size-m} - #{$size-xs});
+  display: inline-block;
   height: calc(#{$size-m} - #{$size-xs});
   margin: 0 $size-xs;
-  display: inline-block;
   transition: all 100ms ease-in-out;
-  border: 1px solid #eaeaea;
+  width: calc(#{$size-m} - #{$size-xs});
 }
 
 
 .slider__control-indicators__item--last {
-  width: $size-s;
   height: $size-s;
+  width: $size-s;
 }
 
 .slider__control-indicators__item--active {
-  width: $size-m;
-  height: $size-m;
   background-color: $blue500;
+  height: $size-m;
+  width: $size-m;
 }
 
 .loading-wrapper {
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
   height: 100%;
+  justify-content: center;
 }
 
 @keyframes loading {
