@@ -6,9 +6,16 @@ export const getValueFromState = (path: string, state: IPVObject): any => {
   let finalValue: any = null;
   let currentState = state;
   const splittedPath = path.split('.');
+  const squareBracketsRegex = /(.*?)\[(.*?)\]/;
 
   for (let i = 0; i < splittedPath.length; i += 1) {
-    currentState = currentState[splittedPath[i]];
+    const regexMatch = splittedPath[i].match(squareBracketsRegex);
+
+    if (regexMatch) {
+      currentState = currentState[regexMatch[1]][regexMatch[2]];
+    } else {
+      currentState = currentState[splittedPath[i]];
+    }
 
     if (currentState !== undefined) {
       finalValue = currentState;

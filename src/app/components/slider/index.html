@@ -38,7 +38,12 @@
           </div>
           <div class="row">
             <div class="col-12 col-12-sm">
-              <p class="text" pvIf="startup.data.place">{{ startup.data.place }}</p>
+              <p class="text">
+                {{ startup.data.adresses[0].city.name }} -
+                <span>
+                  {{ startup.data.adresses[0].state.uf }}
+                </span>
+              </p>
             </div>
           </div>
         </div>
