@@ -9,7 +9,7 @@ import PVComponent from "~/pv-parahyba/extends/pv-component";
 ```
 
 ### Managing state of the components
-All **PVComponents** works with _states_. They know exatly moment to recompile without listening changes.
+All **PVComponents** works with _states_. They know the exatly moment to recompile without listening changes.
 The state can be created by defining the data method and returning expected the named object with your value.
 
 ```typescript
