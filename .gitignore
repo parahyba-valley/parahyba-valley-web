@@ -3,6 +3,7 @@ public/
 built-lambda/
 data/
 .DS_Store
+.idea/
 
 # environment secrets
 #
