@@ -2,8 +2,8 @@
 @import 'scss/btn.scss';
 
 .sign-up-button {
-  margin-top: 7px;
-  margin-bottom: 7px;
+  margin-bottom: $space-s;
+  margin-top: $space-s;
 
   @media (max-width: $screen-phone) {
     font-size: $text-size-small;
