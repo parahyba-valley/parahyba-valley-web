@@ -46,4 +46,4 @@ After that, API parahyba-valley is available on http://localhost:9000/ and WEB p
 #### Resources
 
 - [Development](https://github.com/parahyba-valley/parahyba-valley-web/blob/master/DEVELOPMENT.md)
-- [Contributing Guide](https://github.com/parahyba-valley/parahyba-valley-web/blob/master/CONTRIBUTING.md)
+- [Contributing Guide](https://github.com/parahyba-valley/parahyba-valley-web/wiki/How-create-an-PR)
