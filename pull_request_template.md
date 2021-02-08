@@ -1,21 +1,19 @@
 # Issue
-Link para a issue.
+[Link to issue] (https://github.com/parahyba-valley/parahyba-valley-web/issues/)
 
 # Checklist
-- [ ] O meu PR tem uma issue relacionada
-- [ ] Segui as recomendações na documentação para criar o PR
-- [ ] Adicionei documentações se necessário
-- [ ] Adicionei testes para as mudanças realizadas
-- [ ] Testes adicionados/modificados passam localmente
+- [ ] My Pull Request have a linked issue
+- [ ] I've followed the guidelines on How to create a PR
+- [ ] I've added any documentations, if necessary
+- [ ] I've added tests for the changes in this PR
+- [ ] All the tests modified or added passing
 
-# Mudanças
-Lista com mudanças importantes realizadas.
+# Changes
+- I've changed the parahya-compiler to make another for in the loop
+- Created tests for the compiler
 
-# Screenshots desktop
-Screenshots ou GIFs caso envolva algum front.
+# Screenshots
+Screenshots or GIFs if it has any front.
 
-# Screenshots mobile
-Screenshots ou GIFs caso envolva algum front.
-
-# Membros
-(Opcional) Marque os membros que deseja chamar a atenção.
+# Members
+(Optional) Cite the members you want to attract attention.

@@ -4,102 +4,46 @@
 
 ![Parahyba Valley logo](https://parahybavalley.org/9ab7979ccf0ea8912cdc10d1f927085f.png)
 
-# Introdução
-O Parahyba Valley é um projeto para ajudar a divulgar as empresas e projetos do Vale do Paraíba.
+# Welcome to Parahyba Valley
 
-# Setup
+### What's Parahyba Valley?
 
-## Com docker
+Parahyba Valley is an open-source project to help startups, companies and organizations of the Vale do Paraíba promote yours initiatives and products.
 
-Suba o container da aplicação:
+### Setup
+
+#### With docker
+
+Up the container app using:
 ```shell
 docker-compose up -d app
 ```
 
-Instale as dependências:
+Install dependencies
 ```shell
-docker-compose exec app yarn
+docker-compose exec app yarn install
 ```
 
-Inicie a aplicação:
+Start app
 ```shell
-docker-compose exec app npm run start
+docker-compose exec app yarn start
 ```
 
-## Sem docker
+#### Without docker
 
-Instale as dependências:
+Install dependencies
 ```shell
 yarn install
 ```
 
-Execute a aplicação:
+Start app
 ```shell
-npm run start
+yarn start
 ```
 
-Com isso temos o front rodando em `http://localhost:9001/` e o back em `http://localhost:9000/`.
+After that, API parahyba-valley is available on http://localhost:9000/ and WEB parahyba-valley is available on http://localhost:9001/.
 
-# Framework pv-parahyba
-O pv-parahyba framework é responsável por compilar o projeto, rodar o motor de diretrizes e controlar os estados dos seus componentes.
+#### Resources
 
-## Criando um component
-Para criar um component, faça crie uma classe para seu componente e faça o extends da classe PVComponent.
-```typescript
-import PVComponent from "~/pv-parahyba/extends/pv-component";
-```
-
-### Gerenciando os estados do componente
-Os **PVComponents** trabalham com _states_, sabendo exatamente o momento de recompilar sem precisar ficar escutando por alguma mudança em uma variável.
-Para criar um state basta criar um método data retornando um objeto com as variáveis desejada e seus valores iniciais:
-```typescript
-data() => { var1: 'teste' };
-```
-Após compilar, a variável var1, estará disponível para ser acessada através do seu this, ex:
-```typescript
-console.log(this.var1);
-```
-para alterar a variável, basta setar um valor para a mesma, ex:
-```typescript
-this.var1 = 'teste de update';
-```
-### Renderizando o componente
-Dentro do _constructor_ do seu componente será necessário chamar um `super()` referente ao _extends_ do **PVComponent**. No `super` você precisa passar um objeto contendo o atributo `templatePath` indicando o caminho dos arquivos do seu componente. É preciso colocar o caminho a partir da pasta `/app/`:
-```typescript
-super({ componentPath: 'components/slider' })
-```
-
-### Passando atributos para um componente
-Para atribuir um atributo para um componente basta colocar uma propriedade na _tag_ do elemento. Para pegar um valor do state precisamos colocar `:` na frente do atributo. Sendo a propriedade o nome da _property_ chamada dentro do elemento no qual você está representando pela _tag_ e o valor da propriedade é o caminho do valor dentro do seu _state_.
-```html
-<slider :startups="startups"></slider>
-```
-
-### Click listeners
-Para atribuir um listener de click em um elemento basta colocar **PVClick** na _tag_ do elemento, passando o nome da função e seus possiveis parâmetros.
-
-Caso coloque apenas o nome da função: 
-```html
-<button PVClick="teste"></button>
-```
-Ao clicar no botão, a função teste será chamada passando  o evento nativo do JS.
-
-Caso você coloque também os parâmetros: 
-```html
-<button PVClick="teste(1, index)"></button>
-```
-A função teste será chamada passando 1 como argumento e será esperado que a variável _index_ exista dentro do escopo do componente, pois o valor do mesmo será passado.
-
-### PVFor
-Para realizar a repetição de um elemento basta adicionar o atributo **PVFor** ao elemento, passando como valor o nome da chave no escopo na qual será acessada no template e o array dentro do state:
-```html
-<div class="slider__slides__item" pvFor="slide in slides">
-```
-
-### PVIf
-Para exibir ou não um elemento basta adicionar a tag **PVIf** ao elemento, passando como valor o caminho no qual corresponde a condição.
-Para negar uma condição, adicione `!` na frente do parâmetro:
-```html
-<span pvIf="slide.data.teste" >show me if slide.data.teste exists</span>
-<span pvIf="!slide.data.teste" >show me if slide.data.teste is blank</span>
-```
+- [Development](https://github.com/parahyba-valley/parahyba-valley-web/blob/master/DEVELOPMENT.md)
+- [Contributing Guide](https://github.com/parahyba-valley/parahyba-valley-web/wiki/How-create-an-PR)
