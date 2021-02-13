@@ -60,9 +60,13 @@ export default class PVIf {
     const clearedParam = this.value.substring(lastIndexSymbolOccurence + 1);
     const conditionSymbol = this.value.substring(0, lastIndexSymbolOccurence + 1);
     const splittedConditionBySimbols = conditionSymbol.split('!');
-    const value = getValueFromState(clearedParam, state);
 
-    return splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value);
+    const and: boolean = clearedParam
+      .split('&&')
+      .every((value: string) => value.split('||')
+        .some((a: string) => getValueFromState(a.trim(), state)));
+
+    return splittedConditionBySimbols.reduce((condition: boolean) => !condition, !and);
   }
 
   updateCurrentClass(state: IPVObject) {
