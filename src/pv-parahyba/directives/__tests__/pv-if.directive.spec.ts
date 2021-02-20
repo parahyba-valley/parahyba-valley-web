@@ -1,5 +1,6 @@
 import { queryByTestId } from '@testing-library/dom';
-import PVIf from '../pv-if.directive';
+import IPVDirective from '~/pv-parahyba/interfaces/pv-directive.interface';
+import PVIf from '~/pv-parahyba/directives/pv-if.directive';
 
 function createTemplate(value: string): HTMLElement {
   const wrapper = document.createElement('div');
@@ -11,8 +12,8 @@ function createTemplate(value: string): HTMLElement {
   return wrapper;
 }
 
-function mount(options?: any): any {
-  const template = createTemplate(options.value);
+function mount(options?: Omit <IPVDirective, 'element'>): [HTMLElement, PVIf] {
+  const template = createTemplate(options?.value);
   const instance = new PVIf({
     element: template.querySelector('p') as HTMLElement,
     scope: null,
@@ -53,7 +54,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when state is true dened', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: { A: true },
         value: '!A',
@@ -76,7 +77,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when and an is false', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: false,
@@ -102,7 +103,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('show element when or all is false', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: false,
@@ -128,7 +129,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when a and is true', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: false,
@@ -154,7 +155,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when a and is true', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: true,
@@ -180,7 +181,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when a and is true', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: true,
@@ -206,7 +207,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when a and is true', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: false,
@@ -233,7 +234,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when a and is true', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: false,
@@ -261,7 +262,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when a and is true', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: false,
@@ -289,7 +290,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when all is true', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: true,
@@ -317,7 +318,7 @@ describe('pv-if', () => {
       expect(template).toContainElement($target);
     });
 
-    test('hide element when all is true', () => {
+    test('removes the element on the screen', () => {
       const [template] = mount({
         state: {
           A: true,
