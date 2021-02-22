@@ -16,7 +16,7 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/semi': 'error',
-    'semi': 0,
+    semi: 0,
     'import/extensions': 0,
     'max-len': ['error', { code: 120, ignoreUrls: true }],
     'class-methods-use-this': 1,
@@ -31,8 +31,18 @@ module.exports = {
     'no-param-reassign': 1,
   },
   settings: {
-    "import/resolver": {
-      "typescript": {}
+    'import/resolver': {
+      typescript: {},
     },
   },
+  overrides: [
+    {
+      files: [
+        '**/__tests__/*.spec.ts',
+      ],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };

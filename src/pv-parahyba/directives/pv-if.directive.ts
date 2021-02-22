@@ -56,13 +56,17 @@ export default class PVIf {
   }
 
   condition(state: IPVObject): Boolean {
-    const lastIndexSymbolOccurence = this.value.lastIndexOf('!');
-    const clearedParam = this.value.substring(lastIndexSymbolOccurence + 1);
-    const conditionSymbol = this.value.substring(0, lastIndexSymbolOccurence + 1);
-    const splittedConditionBySimbols = conditionSymbol.split('!');
-    const value = getValueFromState(clearedParam, state);
+    return this.value
+      .split('||')
+      .some((partial: string) => partial.split('&&')
+        .every((condition: string) => PVIf.checkCondition(condition.trim(), state)));
+  }
 
-    return splittedConditionBySimbols.reduce((condition: boolean) => !condition, !value);
+  static checkCondition(value: string, state:IPVObject): boolean {
+    const isNot = value.startsWith('!');
+    const stateKey = isNot ? value.slice(1) : value;
+    const result = getValueFromState(stateKey.trim(), state);
+    return isNot ? !result : result;
   }
 
   updateCurrentClass(state: IPVObject) {
