@@ -35,12 +35,11 @@ export default class PVParahybaCompiler {
     if (!text) return '';
 
     let textToReplace = text;
-    const path = textToReplace.match(new RegExp('{{ (.*) }}'));
+    const path = textToReplace.match(/{{ (.*) }}/);
 
     if (path && path[1]) {
       const value = getValueFromState(path[1], this.state);
-      textToReplace = textToReplace.replace(new RegExp(path[0], 'g'), value);
-      textToReplace = this.transpileParamToState(textToReplace);
+      textToReplace = textToReplace.replace(path[0], value);
     }
 
     return textToReplace;
